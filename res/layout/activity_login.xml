@@ -18,7 +18,7 @@
             android:drawableLeft="@drawable/mobile"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
-            android:text="@string/app_name"
+            android:text="超级微信"
             android:textSize="20sp"
             android:textColor="#000"/>
 
