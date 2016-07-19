@@ -258,7 +258,7 @@ public class OkHttpUtils2<T> {
 
     public OkHttpUtils2<T> setRequestUrl(String request) {
         mUrl = new StringBuilder(I.SERVER_ROOT);
-        mUrl.append(I.QUESTION).append(request);
+        mUrl.append(I.QUESTION).append(I.KEY_REQUEST).append(I.EQU).append(request);
 //        Log.e("okhttp","1 murl="+ mUrl.toString());
         return this;
     }
