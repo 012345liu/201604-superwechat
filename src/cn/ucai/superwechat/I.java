@@ -58,6 +58,7 @@ public interface I {
 		String UPDATE_TIME 							= 		"m_location_last_update_time";	//最后更新时间
 	}
 
+	String SERVER_ROOT                             = "http://192.168.1.165:8080/SuperWeChatServer/Server";
 //	String AVATAR_PATH 								= 		"E:/test/";
 	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";
