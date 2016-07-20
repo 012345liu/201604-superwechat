@@ -170,9 +170,9 @@ public class RegisterActivity extends BaseActivity {
 						} else {
 							Log.e(TAG,"register fail..."+result.getRetCode());
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(),R.string.Registration_failed+
-									Utils.getResourceString(RegisterActivity.this,result.getRetCode()), Toast.LENGTH_LONG).show();
-
+							Toast.makeText(getApplicationContext(),
+									R.string.Login_failed + Utils.getResourceString(RegisterActivity.this, result.getRetCode()),
+									Toast.LENGTH_LONG).show();
 
 						}
 					}

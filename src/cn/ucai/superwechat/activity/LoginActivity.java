@@ -46,6 +46,7 @@ import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.Utils;
 
 /**
  * 登陆页面
@@ -188,8 +189,9 @@ public class LoginActivity extends BaseActivity {
 							loginSuccess();
 						} else {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), R.string.Login_failed + result.getRetCode(),
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(),
+									R.string.Login_failed + Utils.getResourceString(LoginActivity.this, result.getRetCode()),
+									Toast.LENGTH_LONG).show();
 
 						}
 					}
