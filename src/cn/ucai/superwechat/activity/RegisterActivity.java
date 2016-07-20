@@ -36,6 +36,7 @@ import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.listener.OnSetAvatarListener;
+import cn.ucai.superwechat.utils.Utils;
 
 /**
  * 注册页
@@ -62,6 +63,7 @@ public class RegisterActivity extends BaseActivity {
 		setContentView(R.layout.activity_register);
 		initView();
 		setListener();
+
 	}
 
 	private void setListener() {
@@ -81,7 +83,7 @@ public class RegisterActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				mOnSetAvatarListener = new OnSetAvatarListener(RegisterActivity.this,
-						R.id.layoutAvatar, getAvatarName(), I.AVATAR_TYPE_USER_PATH);
+						R.id.layout_register, getAvatarName(), I.AVATAR_TYPE_USER_PATH);
 			}
 		});
 
@@ -157,8 +159,8 @@ public class RegisterActivity extends BaseActivity {
 				.addParam(I.User.USER_NAME,username)
 				.addParam(I.User.PASSWORD,pwd)
 				.addParam(I.User.NICK,nick)
-				.targetClass(Result.class)
 				.addFile(file)
+				.targetClass(Result.class)
 				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
 					@Override
 					public void onSuccess(Result result) {
@@ -168,6 +170,10 @@ public class RegisterActivity extends BaseActivity {
 						} else {
 							Log.e(TAG,"register fail..."+result.getRetCode());
 							pd.dismiss();
+							Toast.makeText(getApplicationContext(),R.string.Registration_failed+
+									Utils.getResourceString(RegisterActivity.this,result.getRetCode()), Toast.LENGTH_LONG).show();
+
+
 						}
 					}
 
@@ -197,6 +203,7 @@ public class RegisterActivity extends BaseActivity {
 						}
 					});
 				} catch (final EaseMobException e) {
+					unRegisterAppServer();
 					runOnUiThread(new Runnable() {
 						public void run() {
 							if (!RegisterActivity.this.isFinishing())
@@ -218,8 +225,26 @@ public class RegisterActivity extends BaseActivity {
 				}
 			}
 		}).start();
+	}
 
+	private void unRegisterAppServer() {
+		OkHttpUtils2<Result> utils=new OkHttpUtils2<>();
+		utils.setRequestUrl(I.REQUEST_UNREGISTER)
+				.addParam(I.User.USER_NAME,username)
+				.targetClass(Result.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+						Log.e(TAG,"result="+result);
 
+					}
+
+					@Override
+					public void onError(String error) {
+						Log.e(TAG,"unregister error..."+error);
+
+					}
+				});
 	}
 
 	public void back(View view) {
