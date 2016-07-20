@@ -1,22 +1,24 @@
 package cn.ucai.superwechat.db;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.easemob.util.HanziToPinyin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.ucai.superwechat.domain.User;
-import com.easemob.util.HanziToPinyin;
 
 public class DemoDBManager {
     static private DemoDBManager dbMgr = new DemoDBManager();
@@ -345,7 +347,24 @@ public class DemoDBManager {
 		}
 		return users;
 	}
-    
-    
+    /**
+     * 保存当前登录用户
+     * @param user
+     */
+    synchronized public void saveUserAvatar(UserAvatar user) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues values = new ContentValues();
+        values.put(UserDao.USER_COLUMN_NAME_ID,user.getMUserName());
+        values.put(UserDao.USER_COLUMN_NAME_NICK,user.getMUserNick());
+        values.put(UserDao.USER_COLUMN_NAME_AVATAR,user.getMAvatarId());
+        values.put(UserDao.USER_COLUMN_AVATAR_PATH,user.getMAvatarPath());
+        values.put(UserDao.USER_COLUMN_AVATAR_TYPE,user.getMAvatarType());
+        values.put(UserDao.USER_COLUMN_AVATAR_LAST_UPDATE_TIME,user.getMAvatarLastUpdateTime());
+        if(db.isOpen()){
+            db.replace(UserDao.USER_TABLE_NAME, null, values);
+        }
+
+
+    }
     
 }

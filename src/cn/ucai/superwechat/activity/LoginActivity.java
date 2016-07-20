@@ -42,6 +42,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
@@ -186,6 +187,9 @@ public class LoginActivity extends BaseActivity {
 					public void onSuccess(Result result) {
 						Log.e(TAG,"result="+result);
 						if (result != null && result.isRetMsg()) {
+							UserAvatar user = (UserAvatar) result.getRetData();
+							Log.e(TAG,"user="+user);
+							saveUserToDB(user);
 							loginSuccess();
 						} else {
 							pd.dismiss();
@@ -205,6 +209,13 @@ public class LoginActivity extends BaseActivity {
 
 					}
 				});
+	}
+
+	private void saveUserToDB(UserAvatar user) {
+		if (user!=null) {
+			UserDao dao = new UserDao(LoginActivity.this);
+			dao.saveUserAvatar(user);
+		}
 	}
 
 	private void loginSuccess() {

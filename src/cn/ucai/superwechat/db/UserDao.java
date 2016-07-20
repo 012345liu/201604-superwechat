@@ -18,6 +18,7 @@ import android.content.Context;
 import java.util.List;
 import java.util.Map;
 
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.ucai.superwechat.domain.User;
 
@@ -44,6 +45,7 @@ public class UserDao {
 	public static final String USER_COLUMN_AVATAR_TYPE = "mavatarType";
 	public static final String USER_COLUMN_AVATAR_LAST_UPDATE_TIME = "mavatarLastUpdateTime";
 
+
 	public UserDao(Context context) {
 	    DemoDBManager.getInstance().onInit(context);
 	}
@@ -55,6 +57,15 @@ public class UserDao {
 	 */
 	public void saveContactList(List<User> contactList) {
 	    DemoDBManager.getInstance().saveContactList(contactList);
+	}
+
+	/**
+	 * 当前登录用户
+	 *
+	 * @param user
+	 */
+	public void saveUserAvatar(UserAvatar user) {
+		DemoDBManager.getInstance().saveUserAvatar(user);
 	}
 
 	/**
@@ -106,4 +117,7 @@ public class UserDao {
     public void saveRobotUser(List<RobotUser> robotList){
     	DemoDBManager.getInstance().saveRobotList(robotList);
     }
+
+
+
 }
