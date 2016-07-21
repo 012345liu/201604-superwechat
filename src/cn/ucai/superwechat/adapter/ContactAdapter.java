@@ -13,9 +13,6 @@
  */
 package cn.ucai.superwechat.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,11 +26,14 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.easemob.util.EMLog;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.UserUtils;
-
-import com.easemob.util.EMLog;
 
 /**
  * 简单的好友Adapter实现
@@ -120,16 +120,17 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			holder.nameTextview.setText(user.getNick());
 			holder.avatar.setImageResource(cn.ucai.superwechat.R.drawable.groups_icon);
 		}else{
-		    holder.nameTextview.setText(user.getNick());
-		    //设置用户头像
-			UserUtils.setUserAvatar(getContext(), username, holder.avatar);
+		  //  holder.nameTextview.setText(user.getNick());
+			UserUtils.setAppUserNick(username,holder.nameTextview);
+			//设置用户头像
+			UserUtils.setAppUserAvatar(getContext(), username, holder.avatar);
 			if(holder.unreadMsgView != null)
 			    holder.unreadMsgView.setVisibility(View.INVISIBLE);
 		}
 		
 		return convertView;
 	}
-	
+
 	@Override
 	public User getItem(int position) {
 		return super.getItem(position);
