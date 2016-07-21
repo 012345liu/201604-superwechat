@@ -180,7 +180,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		}
 		return myFilter;
 	}
-	
+
 	private class  MyFilter extends Filter{
         List<User> mOriginalList = null;
 
