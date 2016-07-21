@@ -59,7 +59,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		copyUserList.addAll(objects);
 		layoutInflater = LayoutInflater.from(context);
 	}
-	
+
 	private static class ViewHolder {
 	    ImageView avatar;
 	    TextView unreadMsgView;
@@ -80,7 +80,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		}else{
 		    holder = (ViewHolder) convertView.getTag();
 		}
-		
+
 		User user = getItem(position);
 		if(user == null)
 			Log.d("ContactAdapter", position + "");
@@ -127,7 +127,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			if(holder.unreadMsgView != null)
 			    holder.unreadMsgView.setVisibility(View.INVISIBLE);
 		}
-		
+
 		return convertView;
 	}
 
@@ -135,7 +135,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	public User getItem(int position) {
 		return super.getItem(position);
 	}
-	
+
 	@Override
 	public int getCount() {
 		return super.getCount();
@@ -148,7 +148,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	public int getSectionForPosition(int position) {
 		return sectionOfPosition.get(position);
 	}
-	
+
 	@Override
 	public Object[] getSections() {
 		positionOfSection = new SparseIntArray();
@@ -172,7 +172,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		}
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	@Override
 	public Filter getFilter() {
 		if(myFilter==null){
@@ -183,7 +183,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	
 	private class  MyFilter extends Filter{
         List<User> mOriginalList = null;
-		
+
 		public MyFilter(List<User> myList) {
 			this.mOriginalList = myList;
 		}
@@ -194,9 +194,12 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			if(mOriginalList==null){
 			    mOriginalList = new ArrayList<User>();
 			}
+			Log.e(TAG, "contacts original size:" + mOriginalList.size());
+			Log.e(TAG, "contacts copy size:" + copyUserList.size());
+			Log.e(TAG, "prefix=" + prefix);
 			EMLog.d(TAG, "contacts original size: " + mOriginalList.size());
 			EMLog.d(TAG, "contacts copy size: " + copyUserList.size());
-			
+
 			if(prefix==null || prefix.length()==0){
 				results.values = copyUserList;
 				results.count = copyUserList.size();
@@ -207,14 +210,17 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 				for(int i=0;i<count;i++){
 					final User user = mOriginalList.get(i);
 					String username = user.getUsername();
-					
-					if(username.startsWith(prefixString)){
-						newValues.add(user);
+
+					if(username.contains(prefixString)){
+						if (!username.equals(Constant.GROUP_USERNAME)&&
+								!username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+							newValues.add(user);
+						}
 					}
 					else{
 						 final String[] words = username.split(" ");
 	                     final int wordCount = words.length;
-	
+
 	                     // Start at index 0, in case valueText starts with space(s)
 	                     for (int k = 0; k < wordCount; k++) {
 	                         if (words[k].startsWith(prefixString)) {
@@ -246,8 +252,8 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 			}
 		}
 	}
-	
-	
+
+
 	@Override
 	public void notifyDataSetChanged() {
 	    super.notifyDataSetChanged();
@@ -256,6 +262,6 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	        copyUserList.addAll(userList);
 	    }
 	}
-	
+
 
 }
