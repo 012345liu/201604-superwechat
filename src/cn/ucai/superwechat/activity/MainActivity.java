@@ -225,7 +225,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 groupUser.setHeader("");
                 userlist.put(Constant.GROUP_USERNAME, groupUser);
                 
-                 // 添加"聊天室"
+               /*  // 添加"聊天室"
                 User chatRoomItem = new User();
                 String strChatRoom = context.getString(cn.ucai.superwechat.R.string.chat_room);
                 chatRoomItem.setUsername(Constant.CHAT_ROOM);
@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
         		robotUser.setNick(strRobot);
         		robotUser.setHeader("");
         		userlist.put(Constant.CHAT_ROBOT, robotUser);
-        		
+        		*/
                  // 存入内存
                 ((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
                  // 存入db

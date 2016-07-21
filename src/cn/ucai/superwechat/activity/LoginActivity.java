@@ -187,7 +187,7 @@ public class LoginActivity extends BaseActivity {
 					@Override
 					public void onSuccess(String s) {
 						Log.e(TAG,"s="+s);
-						Result result = Utils.getListResultFromJson(s, UserAvatar.class);
+						Result result = Utils.getResultFromJson(s, UserAvatar.class);
 						Log.e(TAG,"result="+result);
 						if (result != null && result.isRetMsg()) {
 							UserAvatar user = (UserAvatar) result.getRetData();
@@ -286,14 +286,14 @@ public class LoginActivity extends BaseActivity {
 		groupUser.setHeader("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
-		// 添加"Robot"
+		/*// 添加"Robot"
 		User robotUser = new User();
 		String strRobot = getResources().getString(cn.ucai.superwechat.R.string.robot_chat);
 		robotUser.setUsername(Constant.CHAT_ROBOT);
 		robotUser.setNick(strRobot);
 		robotUser.setHeader("");
 		userlist.put(Constant.CHAT_ROBOT, robotUser);
-		
+		*/
 		// 存入内存
 		((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
 		// 存入db
