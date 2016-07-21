@@ -11,7 +11,9 @@ import com.squareup.picasso.Picasso;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.domain.User;
 
 public class UserUtils {
@@ -27,7 +29,7 @@ public class UserUtils {
         if(user == null){
             user = new User(username);
         }
-            
+
         if(user != null){
             //demo没有这些数据，临时填充
         	if(TextUtils.isEmpty(user.getNick()))
@@ -35,7 +37,7 @@ public class UserUtils {
         }
         return user;
     }
-    
+
     /**
      * 设置用户头像
      * @param username
@@ -87,7 +89,7 @@ public class UserUtils {
 			Picasso.with(context).load(cn.ucai.superwechat.R.drawable.default_avatar).into(imageView);
 		}
 	}
-    
+
     /**
      * 设置用户昵称
      */
@@ -99,7 +101,7 @@ public class UserUtils {
     		textView.setText(username);
     	}
     }
-    
+
     /**
      * 设置当前用户昵称
      */
@@ -109,7 +111,7 @@ public class UserUtils {
     		textView.setText(user.getNick());
     	}
     }
-    
+
     /**
      * 保存或更新某个用户
      * @param newUser
@@ -119,6 +121,42 @@ public class UserUtils {
 			return;
 		}
 		((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
+	}
+
+
+
+	/**
+	 * 设置用户好友的昵称
+	 */
+	public static void setAppUserNick(String username, TextView textview) {
+		UserAvatar user = getAppUserInfo(username);
+		if (user!=null) {
+			if(user.getMUserNick() != null){
+				textview.setText(user.getMUserNick());
+
+			}else{
+				textview.setText(username);
+			}
+		}else{
+			textview.setText(username);
+		}
+
+	}
+
+
+
+	/**
+	 * 根据username获取相应user，由于demo没有真实的用户数据，这里给的模拟的数据；
+	 * @param username
+	 * @return
+	 */
+	public static UserAvatar getAppUserInfo(String username) {
+		UserAvatar user = SuperWeChatApplication.getInstance().getUserMap().get(username);
+		if(user == null){
+			user = new UserAvatar();
+		}
+		return user;
+
 	}
 
 }
