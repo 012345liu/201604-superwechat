@@ -169,4 +169,16 @@ public class UserUtils {
 			textView.setText(user.getMUserName());
 		}
 	}
+
+	/**
+	 * 设置当前用户头像
+	 * @param context
+	 * @param imageView
+     */
+
+	public static void setAppCurrentUserAvatar(Context context, ImageView imageView) {
+		String userName = SuperWeChatApplication.getInstance().getUserName();
+		setAppUserAvatar(context, userName, imageView);
+
+	}
 }
