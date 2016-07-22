@@ -130,15 +130,23 @@ public class UserUtils {
 	 */
 	public static void setAppUserNick(String username, TextView textview) {
 		UserAvatar user = getAppUserInfo(username);
+		setAppUserNick(user,textview);
+
+	}
+
+	/**
+	 * 设置用户好友的昵称
+	 */
+	public static void setAppUserNick(UserAvatar user , TextView textview) {
 		if (user!=null) {
 			if(user.getMUserNick() != null){
 				textview.setText(user.getMUserNick());
 
 			}else{
-				textview.setText(username);
+				textview.setText(user.getMUserName());
 			}
 		}else{
-			textview.setText(username);
+			textview.setText(user.getMUserName());
 		}
 
 	}
