@@ -585,36 +585,29 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		@Override
 		public void onContactDeleted(final List<String> usernameList) {
 			// 被删除
-			Map<String, User> localUsers = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
-			List<String> toDelUserName = new ArrayList<>();
-			for (String username : usernameList) {
-				Log.e(TAG,"onContactDeleted,usernameList="+usernameList);
-				localUsers.remove(username);
-				toDelUserName.add(username);
-				userDao.deleteContact(username);
-				inviteMessgeDao.deleteMessage(username);
-			}
-			String currentUserName = SuperWeChatApplication.getInstance().getUserName();
-			for ( final String name:toDelUserName) {
-				final OkHttpUtils2<Result> utils = new OkHttpUtils2<>();
+			String currentUserName=SuperWeChatApplication.getInstance().getUserName();
+			for (final String username : usernameList) {
+				final  OkHttpUtils2<Result> utils=new OkHttpUtils2<>();
 				utils.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 						.addParam(I.Contact.USER_NAME,currentUserName)
-						.addParam(I.Contact.CU_NAME,name)
+						.addParam(I.Contact.CU_NAME,username)
 						.targetClass(Result.class)
 						.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
 							@Override
 							public void onSuccess(Result result) {
-								Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
-								List<UserAvatar> userList = SuperWeChatApplication.getInstance().getList();
-								UserAvatar u = userMap.get(name);
-								userList.remove(u);
-								userMap.remove(name);
-								sendStickyBroadcast(new Intent("update_contact_list"));
+								if (result.isRetMsg()){
+									((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(username);
+									UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(username);
+									SuperWeChatApplication.getInstance().getList().remove(u);
+									SuperWeChatApplication.getInstance().getUserMap().remove(u);
+									userDao.deleteContact(username);
+									inviteMessgeDao.deleteMessage(username);
+									sendStickyBroadcast(new Intent("update_contact_list"));
+								}
 							}
 
 							@Override
 							public void onError(String error) {
-
 							}
 						});
 			}
