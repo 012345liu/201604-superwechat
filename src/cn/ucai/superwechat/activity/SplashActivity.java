@@ -93,7 +93,7 @@ public class SplashActivity extends BaseActivity {
 										Log.i(TAG, "error=" + error);
 									}
 								});
-					}else if (user!=null) {
+					}else  {
 						SuperWeChatApplication.getInstance().setUser(user);
 					    SuperWeChatApplication.currentUserNick = user.getMUserNick();
 					}

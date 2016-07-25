@@ -110,4 +110,35 @@ public class UserAvatar implements Serializable {
 				+ ", mavatarPath=" + mavatarPath + ", mavatarType=" + mavatarType + ", mavatarLastUpdateTime="
 				+ mavatarLastUpdateTime + "]";
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		UserAvatar that = (UserAvatar) o;
+
+		if (!muserName.equals(that.muserName)) return false;
+		if (muserNick != null ? !muserNick.equals(that.muserNick) : that.muserNick != null)
+			return false;
+		if (mavatarId != null ? !mavatarId.equals(that.mavatarId) : that.mavatarId != null)
+			return false;
+		if (mavatarPath != null ? !mavatarPath.equals(that.mavatarPath) : that.mavatarPath != null)
+			return false;
+		if (mavatarType != null ? !mavatarType.equals(that.mavatarType) : that.mavatarType != null)
+			return false;
+		return mavatarLastUpdateTime != null ? mavatarLastUpdateTime.equals(that.mavatarLastUpdateTime) : that.mavatarLastUpdateTime == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = muserName.hashCode();
+		result = 31 * result + (muserNick != null ? muserNick.hashCode() : 0);
+		result = 31 * result + (mavatarId != null ? mavatarId.hashCode() : 0);
+		result = 31 * result + (mavatarPath != null ? mavatarPath.hashCode() : 0);
+		result = 31 * result + (mavatarType != null ? mavatarType.hashCode() : 0);
+		result = 31 * result + (mavatarLastUpdateTime != null ? mavatarLastUpdateTime.hashCode() : 0);
+		return result;
+	}
 }
