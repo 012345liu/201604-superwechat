@@ -13,14 +13,6 @@
  */
 package cn.ucai.superwechat.activity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -51,19 +43,32 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import cn.ucai.superwechat.applib.controller.HXSDKHelper;
-import cn.ucai.superwechat.applib.controller.HXSDKHelper.HXSyncListener;
 import com.easemob.chat.EMContactManager;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoHXSDKHelper;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.adapter.ContactAdapter;
+import cn.ucai.superwechat.applib.controller.HXSDKHelper;
+import cn.ucai.superwechat.applib.controller.HXSDKHelper.HXSyncListener;
+import cn.ucai.superwechat.bean.UserAvatar;
+import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.widget.Sidebar;
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.EMLog;
 
 /**
  * 联系人列表页
@@ -327,12 +332,34 @@ public class ContactlistFragment extends Fragment {
 	 * @param tobeDeleteUser
 	 */
 	public void deleteContact(final User tobeDeleteUser) {
-		String st1 = getResources().getString(R.string.deleting);
-		final String st2 = getResources().getString(R.string.Delete_failed);
+		String st1 = getResources().getString(cn.ucai.superwechat.R.string.deleting);
+		final String st2 = getResources().getString(cn.ucai.superwechat.R.string.Delete_failed);
 		final ProgressDialog pd = new ProgressDialog(getActivity());
 		pd.setMessage(st1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
+		final UserAvatar user = SuperWeChatApplication.getInstance().getUser();
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2();
+		utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
+				.addParam(I.Contact.USER_NAME,user.getMUserName())
+				.addParam(I.Contact.CU_NAME,tobeDeleteUser.getUsername())
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String result) {
+						Toast.makeText(getActivity(), "删除成功啦！", Toast.LENGTH_SHORT).show();
+						SuperWeChatApplication.getInstance().getUserMap().remove(user.getMUserName());
+						SuperWeChatApplication.getInstance().getUserMap().remove(toBeProcessUsername);
+
+						SuperWeChatApplication.getInstance().getList().remove(user);
+						SuperWeChatApplication.getInstance().getList().remove(toBeProcessUser);
+					}
+
+					@Override
+					public void onError(String error) {
+
+					}
+				});
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -353,7 +380,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2 + e.getMessage(), 1).show();
+							Toast.makeText(getActivity(), st2 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 
