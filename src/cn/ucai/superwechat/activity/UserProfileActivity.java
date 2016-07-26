@@ -90,7 +90,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		if (username == null||username.equals(EMChatManager.getInstance().getCurrentUser())) {
 			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
 			UserUtils.setAppCurrentUserNick(this,tvNickName);
-			UserUtils.setAppCurrentUserAvatar(this, headAvatar);
+			UserUtils.setCurrentUserAvatar(this, headAvatar);
 		} else {
 			tvUsername.setText(username);
 			UserUtils.setAppUserNick(username, tvNickName);
@@ -281,11 +281,14 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		}
 		mOnSetAvatarListener.setAvatar(requestCode, data, headAvatar);
 		if (requestCode== OnSetAvatarListener.REQUEST_CROP_PHOTO) {
-			uploadUserAvatar();
+
+			dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
+			dialog.show();
+			uploadUserAvatar(data);
 		}
 	}
 
-	private void uploadUserAvatar() {
+	private void uploadUserAvatar(final Intent data) {
 		File file=new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this,I.AVATAR_TYPE_USER_PATH),
 				avatarName+I.AVATAR_SUFFIX_JPG);
 		String userName = SuperWeChatApplication.getInstance().getUserName();
@@ -299,7 +302,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					@Override
 					public void onSuccess(Result result) {
 						if (result.isRetMsg()) {
-							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatephoto_success), Toast.LENGTH_SHORT).show();
+							setPicToView(data);
 						}
 					}
 					@Override
@@ -336,11 +339,10 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			headAvatar.setImageDrawable(drawable);
 			uploadUserAvatar(Bitmap2Bytes(photo));
 		}
-
 	}
 	
 	private void uploadUserAvatar(final byte[] data) {
-		dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
+
 		new Thread(new Runnable() {
 
 			@Override
@@ -364,7 +366,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			}
 		}).start();
 
-		dialog.show();
+
 	}
 	
 	
