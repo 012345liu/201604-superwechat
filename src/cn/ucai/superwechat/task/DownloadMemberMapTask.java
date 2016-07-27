@@ -18,12 +18,12 @@ import cn.ucai.superwechat.utils.Utils;
 /**
  * Created by sks on 2016/7/21.
  */
-public class DownloadMemberListTask {
-    private static final String TAG = DownloadMemberListTask.class.getSimpleName();
+public class DownloadMemberMapTask {
+    private static final String TAG = DownloadMemberMapTask.class.getSimpleName();
     String hxid;
     Context mContext;
 
-    public DownloadMemberListTask(Context context, String hxid) {
+    public DownloadMemberMapTask(Context context, String hxid) {
         mContext=context;
         this.hxid = hxid;
     }
