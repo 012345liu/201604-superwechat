@@ -136,6 +136,10 @@ public class SuperWeChatApplication extends Application {
 	全局的群组成员集合
 	*/
 	private Map<String,HashMap<String,MemberUserAvatar>> memberMap=new HashMap<String,HashMap<String,MemberUserAvatar>>();
+	/*
+	全局的当前登录用户的群组Map集合
+	*/
+	private Map<String,GroupAvatar> groupMap=new HashMap<String,GroupAvatar>();
 	public List<GroupAvatar> getGroupList() {
 		return groupList;
 	}
@@ -174,5 +178,13 @@ public class SuperWeChatApplication extends Application {
 
 	public void setMemberMap(Map<String, HashMap<String, MemberUserAvatar>> memberMap) {
 		this.memberMap = memberMap;
+	}
+
+	public Map<String, GroupAvatar> getGroupMap() {
+		return groupMap;
+	}
+
+	public void setGroupMap(Map<String, GroupAvatar> groupMap) {
+		this.groupMap = groupMap;
 	}
 }

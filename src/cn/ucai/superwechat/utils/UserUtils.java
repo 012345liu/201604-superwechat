@@ -233,7 +233,7 @@ public class UserUtils {
 
 	public static void setAppMemberNick(String hxid, String username, TextView textView) {
 		MemberUserAvatar member = getAppMemberInfo(hxid, username);
-		if (member != null && member.getMUserNick() != null) {
+		if (member != null && username != null) {
 			textView.setText(member.getMUserNick());
 		} else {
 			textView.setText(username);
