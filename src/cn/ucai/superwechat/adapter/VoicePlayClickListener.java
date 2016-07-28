@@ -149,6 +149,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		} catch (Exception e) {
 		}
 	}
+	@SuppressWarnings("ResourceType")
 
 	// show the voice playing animation
 	private void showAnimation() {

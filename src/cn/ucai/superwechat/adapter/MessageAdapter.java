@@ -632,7 +632,7 @@ public class MessageAdapter extends BaseAdapter{
 			}
 		}
 	}
-	
+	@SuppressWarnings("ResourceType")
 	private void setRobotMenuMessageLayout(LinearLayout parentView,JSONArray jsonArr){
 		try {
 			parentView.removeAllViews();
@@ -812,7 +812,7 @@ public class MessageAdapter extends BaseAdapter{
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast),Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -938,7 +938,7 @@ public class MessageAdapter extends BaseAdapter{
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -965,6 +965,8 @@ public class MessageAdapter extends BaseAdapter{
 	 * @param position
 	 * @param convertView
 	 */
+	@SuppressWarnings("ResourceType")
+
 	private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
 		int len = voiceBody.getLength();
@@ -1160,7 +1162,7 @@ public class MessageAdapter extends BaseAdapter{
 								holder.tv.setVisibility(View.INVISIBLE);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT)
 										.show();
 								timer.cancel();
 							}
@@ -1228,7 +1230,6 @@ public class MessageAdapter extends BaseAdapter{
 	 * 
 	 * @param message
 	 * @param holder
-	 * @param position
 	 */
 	public void sendMsgInBackground(final EMMessage message, final ViewHolder holder) {
 		holder.staus_iv.setVisibility(View.GONE);
@@ -1350,7 +1351,7 @@ public class MessageAdapter extends BaseAdapter{
 							// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
 							holder.staus_iv.setVisibility(View.VISIBLE);
 							Toast.makeText(activity,
-									activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
+									activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -1528,7 +1529,6 @@ public class MessageAdapter extends BaseAdapter{
 		}
 
 	}
-
 	public static class ViewHolder {
 		ImageView iv;
 		TextView tv;

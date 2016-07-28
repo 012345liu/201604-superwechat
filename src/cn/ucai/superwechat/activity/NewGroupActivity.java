@@ -239,7 +239,7 @@ public class NewGroupActivity extends BaseActivity {
 							});
 						}else {
 							progressDialog.dismiss();
-							Toast.makeText(NewGroupActivity.this, st2, Toast.LENGTH_LONG).show();
+							Toast.makeText(NewGroupActivity.this,"未添加成员", Toast.LENGTH_LONG).show();
 						}
 					}
 					@Override

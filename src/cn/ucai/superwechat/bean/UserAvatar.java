@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 public class UserAvatar implements Serializable {
 	private String muserName;
-//	private String muserPassword;
+	//	private String muserPassword;
 	private String muserNick;
-//	private Integer muserUnreadMsgCount;
+	//	private Integer muserUnreadMsgCount;
 	private Integer mavatarId;
-//	private String mavatarUserName;
+	//	private String mavatarUserName;
 	private String mavatarPath;
 	private Integer mavatarType;
 	private String mavatarLastUpdateTime;
-	
+
 	public UserAvatar() {
 		super();
 	}
 
 	public UserAvatar(String muserName/*, String muserPassword*/, String muserNick/*, Integer muserUnreadMsgCount*/,
-			Integer mavatarId/*, String mavatarUserName*/, String mavatarPath, Integer mavatarType,
-			String mavatarLastUpdateTime) {
+					  Integer mavatarId/*, String mavatarUserName*/, String mavatarPath, Integer mavatarType,
+					  String mavatarLastUpdateTime) {
 		super();
 		this.muserName = muserName;
 //		this.muserPassword = muserPassword;
@@ -32,6 +32,11 @@ public class UserAvatar implements Serializable {
 		this.mavatarLastUpdateTime = mavatarLastUpdateTime;
 	}
 
+	public UserAvatar(String username) {
+		this.muserName=username;
+
+	}
+
 	public String getMUserName() {
 		return muserName;
 	}
@@ -39,15 +44,15 @@ public class UserAvatar implements Serializable {
 	public void setMUserName(String muserName) {
 		this.muserName = muserName;
 	}
-/*
-	public String getMUserPassword() {
-		return muserPassword;
-	}
+	/*
+        public String getMUserPassword() {
+            return muserPassword;
+        }
 
-	public void setMUserPassword(String muserPassword) {
-		this.muserPassword = muserPassword;
-	}
-*/
+        public void setMUserPassword(String muserPassword) {
+            this.muserPassword = muserPassword;
+        }
+    */
 	public String getMUserNick() {
 		return muserNick;
 	}
@@ -55,15 +60,15 @@ public class UserAvatar implements Serializable {
 	public void setMUserNick(String muserNick) {
 		this.muserNick = muserNick;
 	}
-/*
-	public Integer getMUserUnreadMsgCount() {
-		return muserUnreadMsgCount;
-	}
+	/*
+        public Integer getMUserUnreadMsgCount() {
+            return muserUnreadMsgCount;
+        }
 
-	public void setMUserUnreadMsgCount(Integer muserUnreadMsgCount) {
-		this.muserUnreadMsgCount = muserUnreadMsgCount;
-	}
-*/
+        public void setMUserUnreadMsgCount(Integer muserUnreadMsgCount) {
+            this.muserUnreadMsgCount = muserUnreadMsgCount;
+        }
+    */
 	public Integer getMAvatarId() {
 		return mavatarId;
 	}
@@ -71,15 +76,15 @@ public class UserAvatar implements Serializable {
 	public void setMAvatarId(Integer mavatarId) {
 		this.mavatarId = mavatarId;
 	}
-/*
-	public String getMAvatarUserName() {
-		return mavatarUserName;
-	}
+	/*
+        public String getMAvatarUserName() {
+            return mavatarUserName;
+        }
 
-	public void setMAvatarUserName(String mavatarUserName) {
-		this.mavatarUserName = mavatarUserName;
-	}
-*/
+        public void setMAvatarUserName(String mavatarUserName) {
+            this.mavatarUserName = mavatarUserName;
+        }
+    */
 	public String getMAvatarPath() {
 		return mavatarPath;
 	}
@@ -105,40 +110,26 @@ public class UserAvatar implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
-				+ ", mavatarPath=" + mavatarPath + ", mavatarType=" + mavatarType + ", mavatarLastUpdateTime="
-				+ mavatarLastUpdateTime + "]";
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
 		UserAvatar that = (UserAvatar) o;
 
-		if (!muserName.equals(that.muserName)) return false;
-		if (muserNick != null ? !muserNick.equals(that.muserNick) : that.muserNick != null)
-			return false;
-		if (mavatarId != null ? !mavatarId.equals(that.mavatarId) : that.mavatarId != null)
-			return false;
-		if (mavatarPath != null ? !mavatarPath.equals(that.mavatarPath) : that.mavatarPath != null)
-			return false;
-		if (mavatarType != null ? !mavatarType.equals(that.mavatarType) : that.mavatarType != null)
-			return false;
-		return mavatarLastUpdateTime != null ? mavatarLastUpdateTime.equals(that.mavatarLastUpdateTime) : that.mavatarLastUpdateTime == null;
+		return muserName.equals(that.muserName);
 
 	}
 
 	@Override
 	public int hashCode() {
-		int result = muserName.hashCode();
-		result = 31 * result + (muserNick != null ? muserNick.hashCode() : 0);
-		result = 31 * result + (mavatarId != null ? mavatarId.hashCode() : 0);
-		result = 31 * result + (mavatarPath != null ? mavatarPath.hashCode() : 0);
-		result = 31 * result + (mavatarType != null ? mavatarType.hashCode() : 0);
-		result = 31 * result + (mavatarLastUpdateTime != null ? mavatarLastUpdateTime.hashCode() : 0);
-		return result;
+		return muserName.hashCode();
 	}
+
+	@Override
+	public String toString() {
+		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
+				+ ", mavatarPath=" + mavatarPath + ", mavatarType=" + mavatarType + ", mavatarLastUpdateTime="
+				+ mavatarLastUpdateTime + "]";
+	}
+
 }
