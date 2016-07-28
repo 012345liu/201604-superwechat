@@ -255,7 +255,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 										((TextView) findViewById(R.id.group_name)).setText(returnData + "(" + group.getAffiliationsCount()
 												+ st);
 										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st6, 0).show();
+										Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
 									}
 								});
 
@@ -264,12 +264,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								runOnUiThread(new Runnable() {
 									public void run() {
 										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st7, 0).show();
+										Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
 									}
 								});
 							}
 						}
 					}).start();
+					updateGroupName(returnData);
 				}
 				break;
 			case REQUEST_CODE_ADD_TO_BALCKLIST:
@@ -283,14 +284,14 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								public void run() {
 								    refreshMembers();
 									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
+									Toast.makeText(getApplicationContext(), stsuccess, Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (EaseMobException e) {
 							runOnUiThread(new Runnable() {
 								public void run() {
 									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), st9, 0).show();
+									Toast.makeText(getApplicationContext(), st9, Toast.LENGTH_SHORT).show();
 								}
 							});
 						}
@@ -302,6 +303,32 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				break;
 			}
 		}
+	}
+
+	private void updateGroupName(String newGroupName) {
+		GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<>();
+		utils.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
+				.addParam(I.Group.GROUP_ID, String.valueOf(group.getMGroupId()))
+				.addParam(I.Group.NAME, newGroupName)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
+							SuperWeChatApplication.getInstance().getGroupMap().put(groupId, groupAvatar);
+							SuperWeChatApplication.getInstance().getGroupList().add(groupAvatar);
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						Log.e(TAG, "error=" + error);
+
+					}
+				});
 	}
 
 	private void refreshMembers(){
@@ -349,7 +376,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 退出群组
 	 *
-	 * @param groupId
 	 */
 	private void exitGrop() {
 		String st1 = getResources().getString(R.string.Exit_the_group_chat_failure);
@@ -402,7 +428,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
