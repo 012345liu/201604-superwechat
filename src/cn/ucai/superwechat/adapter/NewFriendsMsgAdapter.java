@@ -13,8 +13,6 @@
  */
 package cn.ucai.superwechat.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -34,14 +32,16 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 
-import cn.ucai.superwechat.DemoHXSDKHelper;
+import java.util.List;
+
 import cn.ucai.superwechat.I;
-import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.GroupAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.data.OkHttpUtils2;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.task.DownloadMemberMapTask;
 import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.utils.Utils;
 
@@ -186,10 +186,12 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			public void run() {
 				// 调用sdk的同意方法
 				try {
-					if(msg.getGroupId() == null) //同意好友请求
+					if(msg.getGroupId() == null) { //同意好友请求
 						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-					else //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					}else {//同意加群申请
+						EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+						addMemberToAppGroup(msg.getFrom(), msg.getGroupId());
+					}
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override
@@ -212,13 +214,37 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 						@Override
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(context, str3 + e.getMessage(), 1).show();
+							Toast.makeText(context, str3 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 
 				}
 			}
 		}).start();
+	}
+
+	private void addMemberToAppGroup(String userName, final String hxid) {
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<>();
+		utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBER)
+				.addParam(I.Member.GROUP_HX_ID,hxid)
+				.addParam(I.Member.USER_NAME,userName)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							new DownloadMemberMapTask(context, hxid).execute();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						Log.e(TAG, "error=" + error);
+					}
+				});
+
+
 	}
 
 	private static class ViewHolder {
