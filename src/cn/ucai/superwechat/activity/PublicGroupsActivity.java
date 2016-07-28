@@ -14,19 +14,16 @@
 
 package cn.ucai.superwechat.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,9 +38,12 @@ import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.exceptions.EaseMobException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.utils.UserUtils;
-import cn.ucai.superwechat.utils.Utils;
 
 public class PublicGroupsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -135,7 +135,11 @@ public class PublicGroupsActivity extends BaseActivity {
 
                         public void run() {
                             searchBtn.setVisibility(View.VISIBLE);
-                            groupsList.addAll(returnGroups);
+                            for (EMGroupInfo g:returnGroups) {
+                                if (!SuperWeChatApplication.getInstance().getGroupMap().containsKey(g.getGroupId())) {
+                                    groupsList.add(g);
+                                }
+                            }
                             if(returnGroups.size() != 0){
                                 //获取cursor
                                 cursor = result.getCursor();
@@ -167,7 +171,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                             pb.setVisibility(View.INVISIBLE);
                             footLoadingLayout.setVisibility(View.GONE);
-                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", 0).show();
+                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
