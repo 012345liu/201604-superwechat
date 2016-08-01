@@ -14,15 +14,14 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
-import cn.ucai.fulicenter.task.DownloadGroupListTask;
 import cn.ucai.fulicenter.utils.Utils;
 
 /**
@@ -63,7 +62,7 @@ public class SplashActivity extends BaseActivity {
 					long start = System.currentTimeMillis();
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
-					String userName = SuperWeChatApplication.getInstance().getUserName();
+					String userName = FuLiCenterApplication.getInstance().getUserName();
 					Log.e(TAG, "userName=" + userName);
 					UserDao dao = new UserDao(SplashActivity.this);
 					UserAvatar user = dao.getUserAvatar(userName);
@@ -84,8 +83,8 @@ public class SplashActivity extends BaseActivity {
 											Log.e(TAG,"user="+user);
 											if (user!=null) {
 												//服务器存在此用户，显示此用户和添加按钮
-												SuperWeChatApplication.getInstance().setUser(user);
-												SuperWeChatApplication.currentUserNick = user.getMUserNick();
+												FuLiCenterApplication.getInstance().setUser(user);
+												FuLiCenterApplication.currentUserNick = user.getMUserNick();
 											}
 										}
 									}
@@ -95,11 +94,11 @@ public class SplashActivity extends BaseActivity {
 									}
 								});
 					}else  {
-						SuperWeChatApplication.getInstance().setUser(user);
-					    SuperWeChatApplication.currentUserNick = user.getMUserNick();
+						FuLiCenterApplication.getInstance().setUser(user);
+					    FuLiCenterApplication.currentUserNick = user.getMUserNick();
 					}
 					new DownloadContactListTask(SplashActivity.this,userName).execute();
-					new DownloadGroupListTask(SplashActivity.this,userName).execute();
+					//new DownloadGroupListTask(SplashActivity.this,userName).execute();
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长
 					if (sleepTime - costTime > 0) {

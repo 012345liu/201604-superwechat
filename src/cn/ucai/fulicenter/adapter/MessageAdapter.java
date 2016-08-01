@@ -13,18 +13,6 @@
  */
 package cn.ucai.fulicenter.adapter;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -53,7 +41,6 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
-import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
@@ -67,6 +54,25 @@ import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.chat.VoiceMessageBody;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.DensityUtil;
+import com.easemob.util.EMLog;
+import com.easemob.util.FileUtils;
+import com.easemob.util.LatLng;
+import com.easemob.util.TextFormater;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.File;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
@@ -78,6 +84,7 @@ import cn.ucai.fulicenter.activity.ShowBigImage;
 import cn.ucai.fulicenter.activity.ShowNormalFileActivity;
 import cn.ucai.fulicenter.activity.ShowVideoActivity;
 import cn.ucai.fulicenter.activity.UserProfileActivity;
+import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.task.LoadImageTask;
 import cn.ucai.fulicenter.task.LoadVideoImageTask;
 import cn.ucai.fulicenter.utils.DateUtils;
@@ -85,12 +92,6 @@ import cn.ucai.fulicenter.utils.ImageCache;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.utils.SmileUtils;
 import cn.ucai.fulicenter.utils.UserUtils;
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.DensityUtil;
-import com.easemob.util.EMLog;
-import com.easemob.util.FileUtils;
-import com.easemob.util.LatLng;
-import com.easemob.util.TextFormater;
 
 public class MessageAdapter extends BaseAdapter{
 
@@ -418,7 +419,7 @@ public class MessageAdapter extends BaseAdapter{
 		if ((chatType == ChatType.GroupChat || chatType == ChatType.ChatRoom) && message.direct == EMMessage.Direct.RECEIVE){
 		    //demo里使用username代码nick
 			//UserUtils.setUserNick(message.getFrom(), holder.tv_usernick);
-			UserUtils.setAppMemberNick(username, message.getFrom(), holder.tv_usernick);
+			//UserUtils.setAppMemberNick(username, message.getFrom(), holder.tv_usernick);
 		}
 		if(message.direct == EMMessage.Direct.SEND){
 			UserUtils.setCurrentUserNick(holder.tv_usernick);
@@ -1425,7 +1426,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * 
 	 * @param thumbernailPath
 	 * @param iv
-	 * @param position
+	 * @param remoteDir
 	 * @return the image exists or not
 	 */
 	private boolean showImageView(final String thumbernailPath, final ImageView iv, final String localFullSizePath, String remoteDir,

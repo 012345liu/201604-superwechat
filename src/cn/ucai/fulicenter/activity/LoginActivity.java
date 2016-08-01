@@ -42,9 +42,9 @@ import java.util.Map;
 
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
@@ -52,7 +52,6 @@ import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
-import cn.ucai.fulicenter.task.DownloadGroupListTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
@@ -91,8 +90,8 @@ public class LoginActivity extends BaseActivity {
 		passwordEditText = (EditText) findViewById(cn.ucai.fulicenter.R.id.password);
 
 		setListener();
-		if (SuperWeChatApplication.getInstance().getUserName() != null) {
-			usernameEditText.setText(SuperWeChatApplication.getInstance().getUserName());
+		if (FuLiCenterApplication.getInstance().getUserName() != null) {
+			usernameEditText.setText(FuLiCenterApplication.getInstance().getUserName());
 		}
 	}
 
@@ -208,7 +207,7 @@ public class LoginActivity extends BaseActivity {
 						} else {
 							pd.dismiss();
 							Toast.makeText(getApplicationContext(),
-									R.string.Login_failed + Utils.getResourceString(LoginActivity.this, result.getRetCode()),
+									R.string.Login_failed,
 									Toast.LENGTH_LONG).show();
 
 						}
@@ -263,12 +262,12 @@ public class LoginActivity extends BaseActivity {
 
 	private void loginSuccess(UserAvatar user) {
 		// 登陆成功，保存用户名密码
-		SuperWeChatApplication.getInstance().setUserName(currentUsername);
-		SuperWeChatApplication.getInstance().setPassword(currentPassword);
-		SuperWeChatApplication.getInstance().setUser(user);
-		SuperWeChatApplication.currentUserNick = user.getMUserNick();
+		FuLiCenterApplication.getInstance().setUserName(currentUsername);
+		FuLiCenterApplication.getInstance().setPassword(currentPassword);
+		FuLiCenterApplication.getInstance().setUser(user);
+		FuLiCenterApplication.currentUserNick = user.getMUserNick();
 		new DownloadContactListTask(LoginActivity.this, currentUsername).execute();
-		new DownloadGroupListTask(LoginActivity.this, currentUsername).execute();
+		//new DownloadGroupListTask(LoginActivity.this, currentUsername).execute();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and
@@ -290,7 +289,7 @@ public class LoginActivity extends BaseActivity {
 		}
 		// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
 		boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-				SuperWeChatApplication.currentUserNick.trim());
+				FuLiCenterApplication.currentUserNick.trim());
 		if (!updatenick) {
 			Log.e("LoginActivity", "update current user nick fail");
 		}
@@ -317,13 +316,13 @@ public class LoginActivity extends BaseActivity {
 
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
-		User groupUser = new User();
+		/*User groupUser = new User();
 		String strGroup = getResources().getString(cn.ucai.fulicenter.R.string.group_chat);
 		groupUser.setUsername(Constant.GROUP_USERNAME);
 		groupUser.setNick(strGroup);
 		groupUser.setHeader("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
-		
+		*/
 		/*// 添加"Robot"
 		User robotUser = new User();
 		String strRobot = getResources().getString(cn.ucai.superwechat.R.string.robot_chat);

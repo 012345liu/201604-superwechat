@@ -59,7 +59,7 @@ import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.adapter.ContactAdapter;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper.HXSyncListener;
@@ -219,10 +219,10 @@ public class ContactlistFragment extends Fragment {
 					User user = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
 					user.setUnreadMsgCount(0);
 					startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
-				} else if (Constant.GROUP_USERNAME.equals(username)) {
-					// 进入群聊列表页面
-					startActivity(new Intent(getActivity(), GroupsActivity.class));
-				} //else if(Constant.CHAT_ROOM.equals(username)){
+				} //else if (Constant.GROUP_USERNAME.equals(username)) {
+//					// 进入群聊列表页面
+//					startActivity(new Intent(getActivity(), GroupsActivity.class));
+//			} //else if(Constant.CHAT_ROOM.equals(username)){
 //					//进入聊天室列表页面
 //				    startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
 //				}else if(Constant.CHAT_ROBOT.equals(username)){
@@ -338,7 +338,7 @@ public class ContactlistFragment extends Fragment {
 		pd.setMessage(st1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-		final UserAvatar user = SuperWeChatApplication.getInstance().getUser();
+		final UserAvatar user = FuLiCenterApplication.getInstance().getUser();
 		final OkHttpUtils2<String> utils2 = new OkHttpUtils2();
 		utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 				.addParam(I.Contact.USER_NAME,user.getMUserName())
@@ -348,11 +348,11 @@ public class ContactlistFragment extends Fragment {
 					@Override
 					public void onSuccess(String result) {
 						Toast.makeText(getActivity(), "删除成功啦！", Toast.LENGTH_SHORT).show();
-						SuperWeChatApplication.getInstance().getUserMap().remove(user.getMUserName());
-						SuperWeChatApplication.getInstance().getUserMap().remove(toBeProcessUsername);
+						FuLiCenterApplication.getInstance().getUserMap().remove(user.getMUserName());
+						FuLiCenterApplication.getInstance().getUserMap().remove(toBeProcessUsername);
 
-						SuperWeChatApplication.getInstance().getList().remove(user);
-						SuperWeChatApplication.getInstance().getList().remove(toBeProcessUser);
+						FuLiCenterApplication.getInstance().getList().remove(user);
+						FuLiCenterApplication.getInstance().getList().remove(toBeProcessUser);
 					}
 
 					@Override
@@ -508,8 +508,8 @@ public class ContactlistFragment extends Fragment {
             contactList.add(0, users.get(Constant.GROUP_USERNAME));*/
 
 
-		if(users.get(Constant.GROUP_USERNAME) != null)
-			contactList.add(0, users.get(Constant.GROUP_USERNAME));
+		//if(users.get(Constant.GROUP_USERNAME) != null)
+		//	contactList.add(0, users.get(Constant.GROUP_USERNAME));
 		// 把"申请与通知"添加到首位
 		if(users.get(Constant.NEW_FRIENDS_USERNAME) != null)
 		    contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));

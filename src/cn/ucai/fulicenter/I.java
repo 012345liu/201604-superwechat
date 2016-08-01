@@ -219,7 +219,7 @@ public interface I {
         ACTION_DOWNLOAD, ACTION_PULL_DOWN, ACTION_SCROLL
     }    
 
-	String SERVER_ROOT                             = "http://192.168.1.68:8080/FuLiCenterServer/Server";
+	String SERVER_ROOT                             = "http://192.168.7.18:8080/FuLiCenterServer/Server";
 //	String AVATAR_PATH 								= 		"E:/test/";
     public final int NEW_GOOD=0;
     public final int CATEGORY_GOOD=1;

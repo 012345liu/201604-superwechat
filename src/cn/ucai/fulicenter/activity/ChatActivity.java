@@ -13,14 +13,6 @@
  */
 package cn.ucai.fulicenter.activity;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -72,15 +64,12 @@ import com.easemob.EMError;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
-import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
-import cn.ucai.fulicenter.applib.model.GroupRemoveListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.ImageMessageBody;
@@ -89,14 +78,27 @@ import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.chat.VoiceMessageBody;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
+import com.easemob.util.PathUtil;
+import com.easemob.util.VoiceRecorder;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.adapter.ExpressionAdapter;
 import cn.ucai.fulicenter.adapter.ExpressionPagerAdapter;
 import cn.ucai.fulicenter.adapter.MessageAdapter;
 import cn.ucai.fulicenter.adapter.VoicePlayClickListener;
+import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.domain.RobotUser;
-import cn.ucai.fulicenter.task.DownloadMemberMapTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.utils.SmileUtils;
@@ -104,10 +106,6 @@ import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.widget.ExpandGridView;
 import cn.ucai.fulicenter.widget.PasteEditText;
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.EMLog;
-import com.easemob.util.PathUtil;
-import com.easemob.util.VoiceRecorder;
 
 /**
  * 聊天页面
@@ -182,7 +180,6 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	private File cameraFile;
 	static int resendPos;
 
-	private GroupListener groupListener;
 
 	private ImageView iv_emoticons_normal;
 	private ImageView iv_emoticons_checked;
@@ -405,7 +402,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			toChatUsername = getIntent().getStringExtra("groupId");
 
 			if(chatType == CHATTYPE_GROUP){
-			    onGroupViewCreation();
+			   // onGroupViewCreation();
 			}else{ 
 			    onChatRoomViewCreation();
 			}
@@ -529,7 +526,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         });
 	}
 	
-	protected void onGroupViewCreation(){
+	/*protected void onGroupViewCreation(){
 	    group = EMGroupManager.getInstance().getGroup(toChatUsername);
         
         if (group != null){
@@ -537,13 +534,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         }else{
             ((TextView) findViewById(cn.ucai.fulicenter.R.id.name)).setText(toChatUsername);
         }
-		new DownloadMemberMapTask(getApplicationContext(),toChatUsername).execute();
+		//new DownloadMemberMapTask(getApplicationContext(),toChatUsername).execute();
         
         // 监听当前会话的群聊解散被T事件
         groupListener = new GroupListener();
         EMGroupManager.getInstance().addGroupChangeListener(groupListener);
 	}
-	
+	*/
 	protected void onChatRoomViewCreation(){
         
         final ProgressDialog pd = ProgressDialog.show(this, "", "Joining......");
@@ -771,7 +768,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			}
 		} else if (id == cn.ucai.fulicenter.R.id.btn_video_call) { // 视频通话
 			if (!EMChatManager.getInstance().isConnected())
-				Toast.makeText(this, st1, 0).show();
+				Toast.makeText(this, st1, Toast.LENGTH_SHORT).show();
 			else{
 				startActivity(new Intent(this, VideoCallActivity.class).putExtra("username", toChatUsername).putExtra(
 						"isComingCall", false));
@@ -874,11 +871,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	public void selectPicFromCamera() {
 		if (!CommonUtils.isExitsSdcard()) {
 			String st = getResources().getString(cn.ucai.fulicenter.R.string.sd_card_does_not_exist);
-			Toast.makeText(getApplicationContext(), st, 0).show();
+			Toast.makeText(getApplicationContext(), st, Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		cameraFile = new File(PathUtil.getInstance().getImagePath(), SuperWeChatApplication.getInstance().getUserName()
+		cameraFile = new File(PathUtil.getInstance().getImagePath(), FuLiCenterApplication.getInstance().getUserName()
 				+ System.currentTimeMillis() + ".jpg");
 		cameraFile.getParentFile().mkdirs();
 		startActivityForResult(
@@ -922,8 +919,6 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * 
 	 * @param content
 	 *            message content
-	 * @param isResend
-	 *            boolean resend
 	 */
 	public void sendText(String content) {
 
@@ -1148,12 +1143,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		File file = new File(filePath);
 		if (file == null || !file.exists()) {
 			String st7 = getResources().getString(cn.ucai.fulicenter.R.string.File_does_not_exist);
-			Toast.makeText(getApplicationContext(), st7, 0).show();
+			Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if (file.length() > 10 * 1024 * 1024) {
 			String st6 = getResources().getString(cn.ucai.fulicenter.R.string.The_file_is_not_greater_than_10_m);
-			Toast.makeText(getApplicationContext(), st6, 0).show();
+			Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -1263,15 +1258,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 */
 	public void toGroupDetails(View view) {
 		if (room == null && group == null) {
-			Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.gorup_not_found, 0).show();
+			Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.gorup_not_found, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if(chatType == CHATTYPE_GROUP){
-			startActivityForResult((new Intent(this, GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
-					REQUEST_CODE_GROUP_DETAIL);
+//		startActivityForResult((new Intent(this, GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
+//					REQUEST_CODE_GROUP_DETAIL);
 		}else{
-			startActivityForResult((new Intent(this, ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername)),
-					REQUEST_CODE_GROUP_DETAIL);
+//			startActivityForResult((new Intent(this, ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername)),
+//					REQUEST_CODE_GROUP_DETAIL);
 		}
 	}
 
@@ -1488,12 +1483,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	protected void onDestroy() {
 		super.onDestroy();
 		activityInstance = null;
-		if(groupListener != null){
-		    EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
-		}
-		if (mReceiver!=null) {
-			unregisterReceiver(mReceiver);
-		}
+		/*if(groupListener != null){
+		   // EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
+		}*/
+
 	}
 
 	@Override
@@ -1578,7 +1571,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.Move_into_blacklist_success, 0).show();
+							Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.Move_into_blacklist_success, Toast.LENGTH_SHORT).show();
 						}
 					});
 				} catch (EaseMobException e) {
@@ -1586,7 +1579,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.Move_into_blacklist_failure, 0).show();
+							Toast.makeText(getApplicationContext(), cn.ucai.fulicenter.R.string.Move_into_blacklist_failure, Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -1733,7 +1726,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * 监测群组解散或者被T事件
 	 * 
 	 */
-	class GroupListener extends GroupRemoveListener {
+	/*class GroupListener extends GroupRemoveListener {
 
 		@Override
 		public void onUserRemoved(final String groupId, String groupName) {
@@ -1742,9 +1735,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 
 				public void run() {
 					if (toChatUsername.equals(groupId)) {
-						Toast.makeText(ChatActivity.this, st13, 1).show();
-						if (GroupDetailsActivity.instance != null)
-							GroupDetailsActivity.instance.finish();
+						Toast.makeText(ChatActivity.this, st13, Toast.LENGTH_LONG).show();
+//						if (GroupDetailsActivity.instance != null)
+//							GroupDetailsActivity.instance.finish();
 						finish();
 					}
 				}
@@ -1760,15 +1753,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				public void run() {
 					if (toChatUsername.equals(groupId)) {
 						Toast.makeText(ChatActivity.this, st14, 1).show();
-						if (GroupDetailsActivity.instance != null)
-							GroupDetailsActivity.instance.finish();
+//						if (GroupDetailsActivity.instance != null)
+//							GroupDetailsActivity.instance.finish();
 						finish();
 					}
 				}
 			});
 		}
 
-	}
+	}*/
 
 	public String getToChatUsername() {
 		return toChatUsername;
