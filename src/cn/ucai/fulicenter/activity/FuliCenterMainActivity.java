@@ -55,6 +55,7 @@ public class FuliCenterMainActivity extends BaseActivity{
                 index=4;
                 break;
         }
+
         if (index!=currentIndedx) {
             setCurrentIndexStatus(index);
             currentIndedx = index;

@@ -58,7 +58,7 @@
                         android:layout_height="15dp"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/cart_hint"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="6dp"
                         android:text="4"
                         android:textColor="#fff"
                         android:textSize="12dp"/>
