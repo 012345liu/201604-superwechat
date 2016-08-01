@@ -117,7 +117,6 @@ public class Utils {
                         T t = new Gson().fromJson(date, clazz);
                         result.setRetData(t);
                         return result;
-
                     } catch (UnsupportedEncodingException e1) {
                         e1.printStackTrace();
                         T t = new Gson().fromJson(jsonObject.toString(), clazz);
@@ -137,9 +136,20 @@ public class Utils {
         Result result = new Result();
         Log.e("Utils","jsonStr="+jsonStr);
         try {
+            if (jsonStr==null||jsonStr.isEmpty()||jsonStr.length()<3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if (!jsonObject.isNull("retCode")) {
+                result.setRetCode(jsonObject.getInt("retCode"));
+            } else if (!jsonObject.isNull("msg")) {
+                result.setRetMsg(jsonObject.getBoolean("msg"));
+            }
+            if (!jsonObject.isNull("retMsg")) {
+                result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            } else if (!jsonObject.isNull("result")) {
+                result.setRetMsg(jsonObject.getBoolean("result"));
+            }
             if(!jsonObject.isNull("retData")) {
                 JSONArray array = jsonObject.getJSONArray("retData");
                 if (array != null) {
@@ -153,6 +163,24 @@ public class Utils {
                     return result;
                 }
             }
+            else {
+                if (jsonObject != null) {
+                    Log.e("Utils", "jsonObject=" + jsonObject);
+                    String date;
+                    try {
+                        date = URLDecoder.decode(jsonObject.toString(), I.UTF_8);
+                        Log.e("Utils", "jsonObject=" + date);
+                        T t = new Gson().fromJson(date, clazz);
+                        result.setRetData(t);
+                        return result;
+                    } catch (UnsupportedEncodingException e1) {
+                        e1.printStackTrace();
+                        T t = new Gson().fromJson(jsonObject.toString(), clazz);
+                        result.setRetData(t);
+                        return result;
+                    }
+                }
+            }
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -163,9 +191,20 @@ public class Utils {
     public static <T> Result getPageResultFromJson(String jsonStr,Class<T> clazz){
         Result result = new Result();
         try {
+            if (jsonStr==null||jsonStr.isEmpty()||jsonStr.length()<3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if (!jsonObject.isNull("retCode")) {
+                result.setRetCode(jsonObject.getInt("retCode"));
+            } else if (!jsonObject.isNull("msg")) {
+                result.setRetMsg(jsonObject.getBoolean("msg"));
+            }
+            if (!jsonObject.isNull("retMsg")) {
+                result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            } else if (!jsonObject.isNull("result")) {
+                result.setRetMsg(jsonObject.getBoolean("result"));
+            }
             if(!jsonObject.isNull("retData")) {
                 JSONObject jsonPager = jsonObject.getJSONObject("retData");
                 if (jsonPager != null) {
@@ -182,6 +221,24 @@ public class Utils {
                     pager.setPageData(list);
                     result.setRetData(pager);
                     return result;
+                }
+            }
+            else {
+                if (jsonObject != null) {
+                    Log.e("Utils", "jsonObject=" + jsonObject);
+                    String date;
+                    try {
+                        date = URLDecoder.decode(jsonObject.toString(), I.UTF_8);
+                        Log.e("Utils", "jsonObject=" + date);
+                        T t = new Gson().fromJson(date, clazz);
+                        result.setRetData(t);
+                        return result;
+                    } catch (UnsupportedEncodingException e1) {
+                        e1.printStackTrace();
+                        T t = new Gson().fromJson(jsonObject.toString(), clazz);
+                        result.setRetData(t);
+                        return result;
+                    }
                 }
             }
             return result;
