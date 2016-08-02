@@ -37,7 +37,7 @@ public class NewGoodFragment extends Fragment {
     GoodAdapter mAdapter;
     int mPageId=0;
     TextView tvHint;
-    int action;
+    int action=I.ACTION_DOWNLOAD;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,8 +68,8 @@ public class NewGoodFragment extends Fragment {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE &&
                         lastItemPosition==mAdapter.getItemCount()-1) {
                     if (mAdapter.isMore()) {
-                        mPageId += I.PAGE_SIZE_DEFAULT;
                         action = I.ACTION_PULL_UP;
+                        mPageId += I.PAGE_SIZE_DEFAULT;
                         initData();
                     }
                 }
@@ -91,8 +91,10 @@ public class NewGoodFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                action = I.ACTION_PULL_DOWN;
+                mPageId=0;
+                mSwipeRefreshLayout.setRefreshing(true);
                 tvHint.setVisibility(View.VISIBLE);
-                mPageId=1;
                 initData();
             }
         });
@@ -107,21 +109,23 @@ public class NewGoodFragment extends Fragment {
                 tvHint.setVisibility(View.GONE);
                 mAdapter.setMore(true);
                 mAdapter.setFooterText(getResources().getString(R.string.load_more));
-                if (result!=null) {
+                if (result != null) {
                     Log.e(TAG, "result.length=" + result.length);
                     ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
                     if (action == I.ACTION_PULL_UP) {
                         mAdapter.addData(goodBeanArrayList);
                     }
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
-
                         mAdapter.initData(goodBeanArrayList);
                     }
-                    if (goodBeanArrayList.size()<I.PAGE_SIZE_DEFAULT) {
+                    if (goodBeanArrayList.size() < I.PAGE_SIZE_DEFAULT) {
                         mAdapter.setMore(false);
                         mAdapter.setFooterText(getResources().getString(R.string.no_more));
 
                     }
+                } else {
+                    mAdapter.setMore(false);
+                    mAdapter.setFooterText(getResources().getString(R.string.no_more));
                 }
             }
 
