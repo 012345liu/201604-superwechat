@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.fulicenter.R;
@@ -49,6 +50,14 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mGoodList.size();
+    }
+
+    public void initData(ArrayList<NewGoodBean> list) {
+        if (mGoodList!=null) {
+            mGoodList.clear();
+        }
+        mGoodList.addAll(list);
+        notifyDataSetChanged();
     }
 
     class GoodViewHolder extends RecyclerView.ViewHolder {

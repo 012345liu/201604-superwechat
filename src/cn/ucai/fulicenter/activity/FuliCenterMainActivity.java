@@ -16,6 +16,7 @@ public class FuliCenterMainActivity extends BaseActivity{
     RadioButton[] mrbTabs;
     int index=0;
     int currentIndedx;
+    NewGoodFragment mNewGoodFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fulicenter_main);
@@ -24,7 +25,7 @@ public class FuliCenterMainActivity extends BaseActivity{
 
     private void initView() {
         rbNewGood = (RadioButton) findViewById(R.id.layout_new_good);
-        rbBoutique = (RadioButton) findViewById(R.id.layiut_boutique);
+        rbBoutique = (RadioButton) findViewById(R.id.layout_boutique);
         rbCart = (RadioButton) findViewById(R.id.layout_cart);
         rbCategory = (RadioButton) findViewById(R.id.layout_category);
         rbPersonalCenter = (RadioButton) findViewById(R.id.layout_personal_center);
@@ -35,6 +36,14 @@ public class FuliCenterMainActivity extends BaseActivity{
         mrbTabs[2]=rbCategory;
         mrbTabs[3]=rbCart;
         mrbTabs[4]=rbPersonalCenter;
+        mNewGoodFragment = new NewGoodFragment();
+        // 添加显示第一个fragment
+        getSupportFragmentManager().beginTransaction().
+                add(cn.ucai.fulicenter.R.id.fragment_container, mNewGoodFragment)
+               // .add(cn.ucai.fulicenter.R.id.fragment_container, contactListFragment)
+              //  .hide(contactListFragment)
+                .show(mNewGoodFragment)
+                .commit();
     }
 
     public void onCheckedChange(View view) {
@@ -42,7 +51,7 @@ public class FuliCenterMainActivity extends BaseActivity{
             case R.id.layout_new_good:
                 index=0;
                 break;
-            case R.id.layiut_boutique:
+            case R.id.layout_boutique:
                 index=1;
                 break;
             case R.id.layout_category:
