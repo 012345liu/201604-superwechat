@@ -106,6 +106,7 @@ public class NewGoodFragment extends Fragment {
                 Log.e(TAG, "result=" + result);
                 tvHint.setVisibility(View.GONE);
                 mAdapter.setMore(true);
+                mAdapter.setFooterText(getResources().getString(R.string.load_more));
                 if (result!=null) {
                     Log.e(TAG, "result.length=" + result.length);
                     ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
@@ -118,6 +119,8 @@ public class NewGoodFragment extends Fragment {
                     }
                     if (goodBeanArrayList.size()<I.PAGE_SIZE_DEFAULT) {
                         mAdapter.setMore(false);
+                        mAdapter.setFooterText(getResources().getString(R.string.no_more));
+
                     }
                 }
             }
