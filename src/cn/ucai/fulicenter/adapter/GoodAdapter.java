@@ -24,7 +24,17 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<NewGoodBean> mGoodList;
     GoodViewHolder mGoodViewHolder;
-    public GoodAdapter(Context context,List<NewGoodBean> list) {
+    boolean isMore;
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+    }
+
+    public GoodAdapter(Context context, List<NewGoodBean> list) {
         mContext = context;
         mGoodList = list;
         mGoodList.addAll(list);
@@ -58,6 +68,11 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mGoodList.clear();
         }
         mGoodList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addData(ArrayList<NewGoodBean> goodBeanArrayList) {
+        mGoodList.addAll(goodBeanArrayList);
         notifyDataSetChanged();
     }
 

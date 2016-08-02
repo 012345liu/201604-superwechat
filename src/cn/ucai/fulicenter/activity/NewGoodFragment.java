@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,9 @@ public class NewGoodFragment extends Fragment {
     List<NewGoodBean> mGoodList;
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
-    int mPageId=1;
+    int mPageId=0;
     TextView tvHint;
+    int action;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +52,39 @@ public class NewGoodFragment extends Fragment {
 
     private void setListener() {
         setPullDownRefreshListener();
+        setPullUpRefreshListener();
+    }
+
+    private void setPullUpRefreshListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastItemPosition;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int a=RecyclerView.SCROLL_STATE_DRAGGING;
+                int b = RecyclerView.SCROLL_STATE_IDLE;
+                int c = RecyclerView.SCROLL_STATE_SETTLING;
+                Log.e(TAG, "newState=" + newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        lastItemPosition==mAdapter.getItemCount()-1) {
+                    if (mAdapter.isMore()) {
+                        mPageId += I.PAGE_SIZE_DEFAULT;
+                        action = I.ACTION_PULL_UP;
+                        initData();
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int f = mGridLayoutManager.findFirstVisibleItemPosition();
+                int l = mGridLayoutManager.findLastVisibleItemPosition();
+                Log.e(TAG, "f=" + f+", l=" + l);
+                lastItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
+
+            }
+        });
     }
 
     private void setPullDownRefreshListener() {
@@ -67,19 +102,32 @@ public class NewGoodFragment extends Fragment {
         findGoodList(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
             @Override
             public void onSuccess(NewGoodBean[] result) {
+                mSwipeRefreshLayout.setRefreshing(false);
                 Log.e(TAG, "result=" + result);
                 tvHint.setVisibility(View.GONE);
-                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setMore(true);
                 if (result!=null) {
                     Log.e(TAG, "result.length=" + result.length);
                     ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
-                    mAdapter.initData(goodBeanArrayList);
+                    if (action == I.ACTION_PULL_UP) {
+                        mAdapter.addData(goodBeanArrayList);
+                    }
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+
+                        mAdapter.initData(goodBeanArrayList);
+                    }
+                    if (goodBeanArrayList.size()<I.PAGE_SIZE_DEFAULT) {
+                        mAdapter.setMore(false);
+                    }
                 }
             }
 
             @Override
             public void onError(String error) {
-
+                Log.e(TAG,"error="+error);
+                mSwipeRefreshLayout.setRefreshing(false);
+                tvHint.setVisibility(View.GONE);
+                Toast.makeText(mContext,error, Toast.LENGTH_SHORT).show();
             }
         });
 
