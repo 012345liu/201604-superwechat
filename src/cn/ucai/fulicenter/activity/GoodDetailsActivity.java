@@ -11,8 +11,10 @@ import android.widget.Toast;
 import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.AlbumsBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
+import cn.ucai.fulicenter.utils.DisplayUtils;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
 
@@ -69,6 +71,27 @@ public class GoodDetailsActivity extends BaseActivity{
         tvGoodName.setText(mGoodDetails.getGoodsName());
         tvGoodPriceShop.setText(mGoodDetails.getShopPrice());
         tvGoodPriceCurrent.setText(mGoodDetails.getCurrencyPrice());
+        mSlideAutoLoopView.startPlayLoop(mFlowIndicator,getAlbumImageUrl(),getAlbumImageSize());
+        wvGoodBrief.loadDataWithBaseURL(null,mGoodDetails.getGoodsBrief(),D.TEXT_HTML,D.UTF_8,null);
+    }
+
+    private String[] getAlbumImageUrl() {
+        String[] albumImageUrl = new String[]{};
+        if (mGoodDetails.getProperties()!=null&&mGoodDetails.getProperties().length>0) {
+            AlbumsBean[] albums = mGoodDetails.getProperties()[0].getAlbums();
+            albumImageUrl = new String[albums.length];
+            for (int i=0;i<albumImageUrl.length;i++) {
+                albumImageUrl[i] = albums[i].getImgUrl();
+            }
+        }
+        return albumImageUrl;
+    }
+
+    private int getAlbumImageSize() {
+        if (mGoodDetails.getPromotePrice()!=null&&mGoodDetails.getPromotePrice().length()>0) {
+            return mGoodDetails.getProperties()[0].getAlbums().length;
+        }
+        return 0;
     }
 
     private void getGoodDetailsByGoodId(OkHttpUtils2.OnCompleteListener<GoodDetailsBean> listener) {
@@ -80,6 +103,7 @@ public class GoodDetailsActivity extends BaseActivity{
     }
 
     private void initView() {
+        DisplayUtils.initBack(mContext);
         ivCart = (ImageView) findViewById(R.id.iv_good_cart);
         ivShare = (ImageView) findViewById(R.id.iv_good_share);
         ivCollect = (ImageView) findViewById(R.id.iv_good_collect);
