@@ -27,9 +27,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public CategoryAdapter(Context mContext, List<CategoryGroupBean> mGroupList, List<ArrayList<CategoryChildBean>> mChildList) {
         this.mContext = mContext;
         this.mGroupList = new ArrayList<CategoryGroupBean>();
-        mGroupList.addAll(mGroupList);
+        this.mGroupList.addAll(mGroupList);
         this.mChildList = new ArrayList<ArrayList<CategoryChildBean>>();
-        mChildList.addAll(mChildList);
+        this.mChildList.addAll(mChildList);
     }
 
     @Override

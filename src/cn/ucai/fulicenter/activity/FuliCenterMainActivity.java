@@ -24,6 +24,7 @@ public class FuliCenterMainActivity extends BaseActivity{
     int currentIndedx;
     NewGoodFragment mNewGoodFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
     Fragment[] mFragments;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +36,11 @@ public class FuliCenterMainActivity extends BaseActivity{
     private void initFragment() {
         mNewGoodFragment = new NewGoodFragment();
         mBoutiqueFragment=new BoutiqueFragment();
+        mCategoryFragment = new CategoryFragment();
         mFragments = new Fragment[5];
         mFragments[0] = mNewGoodFragment;
-        mFragments[1]=mBoutiqueFragment;
+        mFragments[1] = mBoutiqueFragment;
+        mFragments[2] = mCategoryFragment;
     }
 
     private void initView() {
@@ -57,10 +60,11 @@ public class FuliCenterMainActivity extends BaseActivity{
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction().
                 add(cn.ucai.fulicenter.R.id.fragment_container, mNewGoodFragment)
-               .add(cn.ucai.fulicenter.R.id.fragment_container, mBoutiqueFragment)
-               .hide(mBoutiqueFragment)
+                .add(cn.ucai.fulicenter.R.id.fragment_container, mBoutiqueFragment)
+                .add(R.id.fragment_container, mCategoryFragment)
+                .hide(mBoutiqueFragment)
+                .hide(mCategoryFragment)
                 .show(mNewGoodFragment)
-                //.show(mBoutiqueFragment)
                 .commit();
     }
 
