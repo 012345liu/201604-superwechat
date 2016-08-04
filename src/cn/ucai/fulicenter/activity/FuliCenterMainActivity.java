@@ -1,6 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -11,16 +14,30 @@ import cn.ucai.fulicenter.R;
  * Created by sks on 2016/8/1.
  */
 public class FuliCenterMainActivity extends BaseActivity{
+
+    public static final String TAG = FuliCenterMainActivity.class.getName();
+
     RadioButton rbNewGood,rbBoutique,rbCategory,rbCart,rbPersonalCenter;
     TextView tvCartHint;
     RadioButton[] mrbTabs;
     int index=0;
     int currentIndedx;
     NewGoodFragment mNewGoodFragment;
+    BoutiqueFragment mBoutiqueFragment;
+    Fragment[] mFragments;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fulicenter_main);
+        initFragment();
         initView();
+    }
+
+    private void initFragment() {
+        mNewGoodFragment = new NewGoodFragment();
+        mBoutiqueFragment=new BoutiqueFragment();
+        mFragments = new Fragment[5];
+        mFragments[0] = mNewGoodFragment;
+        mFragments[1]=mBoutiqueFragment;
     }
 
     private void initView() {
@@ -36,13 +53,14 @@ public class FuliCenterMainActivity extends BaseActivity{
         mrbTabs[2]=rbCategory;
         mrbTabs[3]=rbCart;
         mrbTabs[4]=rbPersonalCenter;
-        mNewGoodFragment = new NewGoodFragment();
+
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction().
                 add(cn.ucai.fulicenter.R.id.fragment_container, mNewGoodFragment)
-               // .add(cn.ucai.fulicenter.R.id.fragment_container, contactListFragment)
-              //  .hide(contactListFragment)
+               .add(cn.ucai.fulicenter.R.id.fragment_container, mBoutiqueFragment)
+               .hide(mBoutiqueFragment)
                 .show(mNewGoodFragment)
+                //.show(mBoutiqueFragment)
                 .commit();
     }
 
@@ -65,10 +83,23 @@ public class FuliCenterMainActivity extends BaseActivity{
                 break;
         }
 
-        if (index!=currentIndedx) {
+        Log.e(TAG,"INDEX===="+index+"currentIndex====="+currentIndedx);
+        if (currentIndedx != index) {
             setCurrentIndexStatus(index);
+            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+            trx.hide(mFragments[currentIndedx]);
+            if (!mFragments[index].isAdded()) {
+                trx.add(cn.ucai.fulicenter.R.id.fragment_container, mFragments[index]);
+            }
+            trx.show(mFragments[index]).commit();
             currentIndedx = index;
         }
+        /*if (index!=currentIndedx) {
+            setCurrentIndexStatus(index);
+            currentIndedx = index;
+        }*/
+
+
     }
 
     private void setCurrentIndexStatus(int index) {
@@ -81,6 +112,4 @@ public class FuliCenterMainActivity extends BaseActivity{
             }
         }
     }
-
-
 }
