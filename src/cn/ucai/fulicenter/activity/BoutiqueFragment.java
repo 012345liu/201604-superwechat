@@ -50,7 +50,7 @@ public class BoutiqueFragment extends Fragment{
 
     private void setListener() {
         setPullDownRefreshListener();
-        setPullUpRefreshListener();
+       // setPullUpRefreshListener();
     }
 
     private void setPullUpRefreshListener() {
