@@ -15,6 +15,7 @@ import java.util.List;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.adapter.CategoryAdapter;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
@@ -30,6 +31,7 @@ public class CategoryFragment extends Fragment{
     List<CategoryGroupBean> mGroupList;
     List<ArrayList<CategoryChildBean>> mChildList;
     CategoryAdapter mAdapter;
+    int groupCount=0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,23 +55,11 @@ public class CategoryFragment extends Fragment{
                     if (groupList!=null) {
                         Log.e(TAG,"groupList.size="+groupList.size());
                         mGroupList = groupList;
+                        int i=0;
                         for (CategoryGroupBean g : groupList) {
-                            findCategoryChildList(new OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>() {
-                                @Override
-                                public void onSuccess(CategoryChildBean[] result) {
-                                    Log.e(TAG,"child,result="+result);
-                                    if (result!=null) {
-                                        ArrayList<CategoryChildBean> childList = Utils.array2List(result);
-                                        Log.e(TAG, "chlidList=" + childList.size());
-                                        mChildList.addAll(mChildList);
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    Log.e(TAG,"child,error="+error);
-                                }
-                            },g.getId());
+                            mChildList.add(new ArrayList<CategoryChildBean>());
+                            findCategoryChildList(g.getId(),i);
+                            i++;
                         }
                     }
                 }
@@ -82,14 +72,35 @@ public class CategoryFragment extends Fragment{
         });
     }
 
-    private void findCategoryChildList(OkHttpUtils2.OnCompleteListener<CategoryChildBean[]> listener,int parentId) {
+    private void findCategoryChildList(int parentId, final int index) {
         OkHttpUtils2<CategoryChildBean[]> utils = new OkHttpUtils2<>();
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
                 .addParam(I.CategoryChild.PARENT_ID,String.valueOf(parentId))
                 .addParam(I.PAGE_ID,String.valueOf(I.PAGE_ID_DEFAULT))
                 .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(CategoryChildBean[].class)
-                .execute(listener);
+                .execute(new OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>() {
+                    @Override
+                    public void onSuccess(CategoryChildBean[] result) {
+                        groupCount++;
+                        Log.e(TAG, "child-result=" + result);
+                        if (result!=null) {
+                            ArrayList<CategoryChildBean> childList = Utils.array2List(result);
+                            if (childList!=null) {
+                                Log.e(TAG,"childList="+childList.size());
+                                mChildList.set(index, childList);
+                            }
+                        }
+                        if (groupCount==mGroupList.size()) {
+                            mAdapter.addAll(mGroupList, mChildList);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "child-error=" + error);
+                    }
+                });
     }
 
     private void findCategoryGroupList(OkHttpUtils2.OnCompleteListener<CategoryGroupBean[]> listener) {

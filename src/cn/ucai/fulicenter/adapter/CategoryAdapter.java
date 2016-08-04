@@ -1,4 +1,4 @@
-package cn.ucai.fulicenter.activity;
+package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -34,7 +34,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return mGroupList==null?mGroupList.size():0;
+        return mGroupList!=null?mGroupList.size():0;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public CategoryChildBean getChild(int groupPosition, int childPosition) {
-        if(mChildList.get(groupPosition)!=null&&mChildList.get(groupPosition).get(childPosition)!=null)
+        if(mGroupList.get(groupPosition)!=null&&mChildList.get(groupPosition).get(childPosition)!=null)
             return mChildList.get(groupPosition).get(childPosition);
         return null;
     }
@@ -118,6 +118,14 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    public void addAll(List<CategoryGroupBean> mGroupList, List<ArrayList<CategoryChildBean>> mChildList) {
+        this.mGroupList.clear();
+        this.mGroupList.addAll(mGroupList);
+        this.mChildList.clear();
+        this.mChildList.addAll(mChildList);
+        notifyDataSetChanged();
     }
 
     class GroupViewHolder {
