@@ -34,6 +34,13 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     FooterViewHolder mFooterViewHolder;
     boolean isMore;
     String footerText;
+    int sortBy;
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        sortBy();
+        notifyDataSetChanged();
+    }
 
     public void setFooterText(String footerText) {
         this.footerText = footerText;
@@ -52,7 +59,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mContext = context;
         mGoodList = list;
         mGoodList.addAll(list);
-        soryByAddTime();
+        sortBy();
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -101,13 +108,13 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mGoodList.clear();
         }
         mGoodList.addAll(list);
-        soryByAddTime();
+        sortBy();
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<NewGoodBean> list) {
         mGoodList.addAll(list);
-        soryByAddTime();
+        sortBy();
         notifyDataSetChanged();
     }
 
@@ -133,11 +140,31 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void soryByAddTime() {
+    private void sortBy() {
         Collections.sort(mGoodList, new Comparator<NewGoodBean>() {
+            int result;
             @Override
             public int compare(NewGoodBean goodLeft, NewGoodBean goodRight) {
-                return (int)(Long.valueOf(goodRight.getAddTime())- Long.valueOf(goodLeft.getAddTime()));
+                switch (sortBy) {
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result=(int)(Long.valueOf(goodRight.getAddTime())- Long.valueOf(goodLeft.getAddTime()));
+                        break;
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result=(int)(Long.valueOf(goodLeft.getAddTime())- Long.valueOf(goodRight.getAddTime()));
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result = convertPrice(goodLeft.getCurrencyPrice()) - convertPrice(goodRight.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result=convertPrice(goodRight.getCurrencyPrice()) - convertPrice(goodLeft.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+
+            private int convertPrice(String price) {
+                price = price.substring(1,price.length());
+                return Integer.valueOf(price);
             }
         });
     }

@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,11 @@ public class CategoryChildActivity extends BaseActivity {
     GoodAdapter mAdapter;
     int mPageId=0;
     TextView tvHint;
+    Button btnSortPrice;
+    Button btnSortAddTime;
+    boolean mSortPriceArc;
+    boolean mSortAddTimeArc;
+    int sortBy;
     int mCatId=0;
     int action=I.ACTION_DOWNLOAD;
 
@@ -43,6 +49,7 @@ public class CategoryChildActivity extends BaseActivity {
         setContentView(R.layout.activity_category_child);
         mContext = this;
         mGoodList=new ArrayList<>();
+        sortBy=I.SORT_BY_ADDTIME_DESC;
         initView();
         initData();
         setListener();
@@ -51,6 +58,9 @@ public class CategoryChildActivity extends BaseActivity {
     private void setListener() {
         setPullDownRefreshListener();
         setPullUpRefreshListener();
+        SortStatusChangedListener listener=new SortStatusChangedListener();
+        btnSortAddTime.setOnClickListener(listener);
+        btnSortPrice.setOnClickListener(listener);
     }
 
     private void setPullUpRefreshListener() {
@@ -155,6 +165,8 @@ public class CategoryChildActivity extends BaseActivity {
     private void initView() {
         //String name = getIntent().getStringExtra(D.Boutique.KEY_NAME);
         DisplayUtils.initBack(mContext);
+        btnSortAddTime = (Button) findViewById(R.id.btn_add_time_sort);
+        btnSortPrice = (Button) findViewById(R.id.btn_price_sort);
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.srl_category);
         mSwipeRefreshLayout.setColorSchemeColors(
                 R.color.google_blue, R.color.google_yellow,
@@ -168,5 +180,30 @@ public class CategoryChildActivity extends BaseActivity {
         tvHint = (TextView)findViewById(R.id.tv_refresh_hint);
     }
 
+    class SortStatusChangedListener implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_price_sort:
+                    if (mSortPriceArc) {
+                        sortBy = I.SORT_BY_PRICE_ASC;
+                    } else {
+                        sortBy = I.SORT_BY_PRICE_DESC;
+                    }
+                    mSortPriceArc = !mSortPriceArc;
+                    break;
+                case R.id.btn_add_time_sort:
+                    if (mSortAddTimeArc) {
+                        sortBy = I.SORT_BY_ADDTIME_ASC;
+                    } else {
+                        sortBy = I.SORT_BY_ADDTIME_DESC;
+                    }
+                    mSortAddTimeArc = !mSortAddTimeArc;
+                    break;
+            }
+            mAdapter.setSortBy(sortBy);
+
+        }
+    }
 }
