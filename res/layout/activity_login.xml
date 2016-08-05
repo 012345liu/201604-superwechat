@@ -4,40 +4,30 @@
     android:layout_height="match_parent"
     android:background="#eff2f6"
     android:orientation="vertical" >
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_height="wrap_content">
+        <include layout="@layout/layout_common_head_title_white" />
         <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:id="@+id/tv_common_title_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/mobile"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textSize="20sp"
-            android:textColor="#000"/>
-
-
+            android:text="账户登录"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:layout_marginRight="15dp"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
     <RelativeLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" >
-
         <RelativeLayout
             android:id="@+id/rl_username"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
             android:background="#fff" >
-
             <ImageView
                 android:id="@+id/iv_username"
                 android:layout_width="wrap_content"
@@ -46,7 +36,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dip"
                 android:src="@drawable/icon_account" />
-
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
@@ -59,14 +48,11 @@
                 android:textColor="#000"
                 android:textSize="18sp" />
         </RelativeLayout>
-
         <RelativeLayout
             android:id="@+id/rl_password"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_below="@id/rl_username"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
             android:layout_marginTop="10dp"
             android:background="#fff" >
 
@@ -99,36 +85,35 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="30dp"
-            android:orientation="horizontal" >
-
+            android:orientation="vertical" >
             <Button
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1"
-                android:background="@drawable/button_register_bg"
-                android:gravity="center"
-                android:onClick="register"
-                android:paddingBottom="7dp"
-                android:paddingTop="7dp"
-                android:text="@string/register"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"
-                android:layout_weight="1"
-                android:background="@drawable/button_login_bg"
+                android:background="@drawable/tb_btn_login_orange_normal"
                 android:gravity="center"
                 android:onClick="login"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
                 android:text="@string/login"
                 android:textColor="@android:color/white"
+                android:textSize="18sp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tb_regiser_bg"
+                android:gravity="center"
+                android:onClick="register"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
+                android:text="@string/register"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="18sp" />
         </LinearLayout>
         <Button
