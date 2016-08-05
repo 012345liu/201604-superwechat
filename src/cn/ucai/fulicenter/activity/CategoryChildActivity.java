@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,10 +18,12 @@ import java.util.List;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.GoodAdapter;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.DisplayUtils;
 import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.view.CatChildFilterButton;
 
 /**
  * Created by sks on 2016/8/2.
@@ -42,7 +45,9 @@ public class CategoryChildActivity extends BaseActivity {
     int sortBy;
     int mCatId=0;
     int action=I.ACTION_DOWNLOAD;
-
+    CatChildFilterButton mCatChildFilterButton;
+    String name;
+    ArrayList<CategoryChildBean> childList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,7 @@ public class CategoryChildActivity extends BaseActivity {
         SortStatusChangedListener listener=new SortStatusChangedListener();
         btnSortAddTime.setOnClickListener(listener);
         btnSortPrice.setOnClickListener(listener);
+        mCatChildFilterButton.setOnCatFilterClickListener(name,childList);
     }
 
     private void setPullUpRefreshListener() {
@@ -110,6 +116,8 @@ public class CategoryChildActivity extends BaseActivity {
 
     private void initData() {
         mCatId=getIntent().getIntExtra(I.CategoryChild.CAT_ID,0);
+        Log.e(TAG, "mCatId=" + mCatId);
+        childList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra("childList");
         if (mCatId < 0) {
             finish();
         }
@@ -149,12 +157,11 @@ public class CategoryChildActivity extends BaseActivity {
                 Toast.makeText(mContext,error, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void findBoutiqueChildList(OkHttpUtils2.OnCompleteListener<NewGoodBean[]> listener) {
         OkHttpUtils2<NewGoodBean[]> utils = new OkHttpUtils2<>();
-        utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
                 .addParam(I.NewAndBoutiqueGood.CAT_ID, String.valueOf(mCatId))
                 .addParam(I.PAGE_ID, String.valueOf(mPageId))
                 .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
@@ -178,28 +185,39 @@ public class CategoryChildActivity extends BaseActivity {
         mAdapter = new GoodAdapter(mContext, mGoodList);
         mRecyclerView.setAdapter(mAdapter);
         tvHint = (TextView)findViewById(R.id.tv_refresh_hint);
+        mCatChildFilterButton = (CatChildFilterButton) findViewById(R.id.btn_cat_childFilter);
+        name = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mCatChildFilterButton.setText(name);
     }
 
     class SortStatusChangedListener implements View.OnClickListener {
-
+        Drawable right;
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_price_sort:
                     if (mSortPriceArc) {
                         sortBy = I.SORT_BY_PRICE_ASC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_up);
                     } else {
                         sortBy = I.SORT_BY_PRICE_DESC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_down);
                     }
                     mSortPriceArc = !mSortPriceArc;
+                    right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                    btnSortPrice.setCompoundDrawables(null, null, right, null);
                     break;
                 case R.id.btn_add_time_sort:
                     if (mSortAddTimeArc) {
                         sortBy = I.SORT_BY_ADDTIME_ASC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_up);
                     } else {
                         sortBy = I.SORT_BY_ADDTIME_DESC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_down);
                     }
                     mSortAddTimeArc = !mSortAddTimeArc;
+                    right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                    btnSortAddTime.setCompoundDrawables(null, null, right, null);
                     break;
             }
             mAdapter.setSortBy(sortBy);
