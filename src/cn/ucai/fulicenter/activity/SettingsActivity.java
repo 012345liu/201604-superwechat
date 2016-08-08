@@ -35,6 +35,7 @@ import cn.ucai.fulicenter.DemoHXSDKModel;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
+import cn.ucai.fulicenter.utils.DisplayUtils;
 
 /**
  * 设置界面
@@ -129,6 +130,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_conversation_settings);
+		DisplayUtils.initBackWithTitle(SettingsActivity.this,getResources().getString(R.string.set));
 		rl_switch_notification = (RelativeLayout) findViewById(cn.ucai.fulicenter.R.id.rl_switch_notification);
 		rl_switch_sound = (RelativeLayout) findViewById(cn.ucai.fulicenter.R.id.rl_switch_sound);
 		rl_switch_vibrate = (RelativeLayout) findViewById(cn.ucai.fulicenter.R.id.rl_switch_vibrate);

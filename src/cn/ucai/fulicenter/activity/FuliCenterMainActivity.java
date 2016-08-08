@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,15 +9,15 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
 
 /**
  * Created by sks on 2016/8/1.
  */
 public class FuliCenterMainActivity extends BaseActivity{
-
     public static final String TAG = FuliCenterMainActivity.class.getName();
-
+    private static final int ACTION_LOGIN = 100;
     RadioButton rbNewGood,rbBoutique,rbCategory,rbCart,rbPersonalCenter;
     TextView tvCartHint;
     RadioButton[] mrbTabs;
@@ -25,6 +26,7 @@ public class FuliCenterMainActivity extends BaseActivity{
     NewGoodFragment mNewGoodFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonalCenterFragment mPersonalCenterFragment;
     Fragment[] mFragments;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +39,12 @@ public class FuliCenterMainActivity extends BaseActivity{
         mNewGoodFragment = new NewGoodFragment();
         mBoutiqueFragment=new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mPersonalCenterFragment = new PersonalCenterFragment();
         mFragments = new Fragment[5];
         mFragments[0] = mNewGoodFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
+        mFragments[4] = mPersonalCenterFragment;
     }
 
     private void initView() {
@@ -83,37 +87,68 @@ public class FuliCenterMainActivity extends BaseActivity{
                 index=3;
                 break;
             case R.id.layout_personal_center:
-                index=4;
+                if (DemoHXSDKHelper.getInstance().isLogined()) {
+                    index = 4;
+                } else {
+                    gotoLogin();
+                } 
                 break;
         }
-
         Log.e(TAG,"INDEX===="+index+"currentIndex====="+currentIndedx);
+        setFragment();
+    }
+
+    private void gotoLogin() {
+        startActivityForResult(new Intent(this,LoginActivity.class),ACTION_LOGIN);
+    }
+
+    private void setFragment() {
+        Log.e(TAG,"setFragment,INDEX===="+index+"currentIndex====="+currentIndedx);
         if (currentIndedx != index) {
-            setCurrentIndexStatus(index);
             FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
             trx.hide(mFragments[currentIndedx]);
             if (!mFragments[index].isAdded()) {
-                trx.add(cn.ucai.fulicenter.R.id.fragment_container, mFragments[index]);
+                trx.add(R.id.fragment_container, mFragments[index]);
             }
             trx.show(mFragments[index]).commit();
+            setRadioButtonStatus(index);
             currentIndedx = index;
         }
-        /*if (index!=currentIndedx) {
-            setCurrentIndexStatus(index);
-            currentIndedx = index;
-        }*/
-
-
     }
 
-    private void setCurrentIndexStatus(int index) {
+    private void setRadioButtonStatus(int index) {
         for (int i=0;i<mrbTabs.length;i++) {
             if (index ==i) {
                 mrbTabs[i].setChecked(true);
             } else {
                 mrbTabs[i].setChecked(false);
-
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==ACTION_LOGIN) {
+            if (DemoHXSDKHelper.getInstance().isLogined()) {
+
+            } else {
+                setRadioButtonStatus(currentIndedx);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (DemoHXSDKHelper.getInstance().isLogined()) {
+
+        } else {
+            index=currentIndedx;
+            if (index==4) {
+                index = 0;
+            }
+            setFragment();
         }
     }
 }
