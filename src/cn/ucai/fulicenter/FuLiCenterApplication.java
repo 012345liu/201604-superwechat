@@ -119,6 +119,10 @@ public class FuLiCenterApplication extends Application {
 	 */
 	private UserAvatar user;
 	/*
+	全局的当前登录用户的收藏数量
+	 */
+	private int collectCount;
+	/*
 	全局的当前登录用户的好友集合
 	 */
 	private List<UserAvatar> list=new ArrayList<UserAvatar>();
@@ -151,5 +155,11 @@ public class FuLiCenterApplication extends Application {
 		this.user = user;
 	}
 
+	public int getCollectCount() {
+		return collectCount;
+	}
 
+	public void setCollectCount(int collectCount) {
+		this.collectCount = collectCount;
+	}
 }

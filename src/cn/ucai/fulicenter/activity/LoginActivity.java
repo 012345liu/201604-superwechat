@@ -51,7 +51,7 @@ import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
-import cn.ucai.fulicenter.task.DownloadContactListTask;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.DisplayUtils;
 import cn.ucai.fulicenter.utils.UserUtils;
@@ -263,13 +263,15 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private void loginSuccess(UserAvatar user) {
-		// 登陆成功，保存用户名密码
+        Log.e(TAG,"loginSuccess,user="+user);
+        // 登陆成功，保存用户名密码
 		FuLiCenterApplication.getInstance().setUserName(currentUsername);
 		FuLiCenterApplication.getInstance().setPassword(currentPassword);
 		FuLiCenterApplication.getInstance().setUser(user);
 		FuLiCenterApplication.currentUserNick = user.getMUserNick();
-		new DownloadContactListTask(LoginActivity.this, currentUsername).execute();
+		//new DownloadContactListTask(LoginActivity.this, currentUsername).execute();
 		//new DownloadGroupListTask(LoginActivity.this, currentUsername).execute();
+		new DownloadCollectCountTask(LoginActivity.this, currentUsername).execute();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and
@@ -300,9 +302,8 @@ public class LoginActivity extends BaseActivity {
 		}
 		// 进入主页面
 		Intent intent = new Intent(LoginActivity.this,
-				PersonalCenterFragment.class);
+				FuliCenterMainActivity.class);
 		startActivity(intent);
-
 		finish();
 
 	}
