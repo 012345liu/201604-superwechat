@@ -9,10 +9,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.DisplayUtils;
 import cn.ucai.fulicenter.view.FlowIndicator;
@@ -31,6 +34,7 @@ public class GoodDetailsActivity extends BaseActivity{
     WebView wvGoodBrief;
     int goodId;
     GoodDetailsBean mGoodDetails;
+    private Boolean isCollect;
 
     @Override
     public void onCreate(Bundle arg0) {
@@ -42,7 +46,7 @@ public class GoodDetailsActivity extends BaseActivity{
     }
 
     private void initData() {
-        goodId=getIntent().getIntExtra(D.GoodDetails.KEY_GOODS, 0);
+        goodId=getIntent().getIntExtra(D.GoodDetails.KEY_GOODS_ID, 0);
         Log.e(TAG, "goodId=" + goodId);
         if (goodId>0) {
             getGoodDetailsByGoodId(new OkHttpUtils2.OnCompleteListener<GoodDetailsBean>() {
@@ -119,4 +123,40 @@ public class GoodDetailsActivity extends BaseActivity{
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setBuiltInZoomControls(true);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCollectStatus();
+    }
+
+    private void initCollectStatus() {
+        if (DemoHXSDKHelper.getInstance().isLogined()) {
+            String userName = FuLiCenterApplication.getInstance().getUserName();
+            OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<>();
+            utils.setRequestUrl(I.REQUEST_IS_COLLECT)
+                    .addParam(I.Collect.USER_NAME,userName)
+                    .addParam(I.Collect.GOODS_ID,String.valueOf(goodId))
+                    .targetClass(MessageBean.class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            Log.e(TAG, "initCollectStatus,result=" + result);
+                            if (result != null && result.isSuccess()) {
+                                ivCollect.setImageResource(R.drawable.bg_collect_out);
+                            } else {
+                                ivCollect.setImageResource(R.drawable.bg_collect_in);
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e(TAG, "error=" + error);
+
+                        }
+                    });
+        }
+    }
+
 }
