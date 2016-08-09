@@ -4,23 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.GoodDetailsActivity;
 import cn.ucai.fulicenter.bean.CollectBean;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.data.OkHttpUtils2;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.view.FooterViewHolder;
 
@@ -28,6 +32,7 @@ import cn.ucai.fulicenter.view.FooterViewHolder;
  * Created by sks on 2016/8/1.
  */
 public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private static final String TAG = CollectAdapter.class.getSimpleName();
     Context mContext;
     List<CollectBean> mCollectList;
     CollectViewHolder mCollectViewHolder;
@@ -35,6 +40,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
     boolean isMore;
     String footerText;
     int sortBy;
+    ImageView ivDelete;
 
     public void setSortBy(int sortBy) {
         this.sortBy = sortBy;
@@ -81,14 +87,46 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
             final CollectBean collect = mCollectList.get(position);
             ImageUtils.setGoodThumb(mContext, mCollectViewHolder.ivGoodThumb,collect.getGoodsThumb());
             mCollectViewHolder.tvGoodName.setText(collect.getGoodsName());
-            Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).into(mCollectViewHolder.ivDeletet);
             mCollectViewHolder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class)
-                    .putExtra(D.GoodDetails.KEY_GOODS,collect.getGoodsId()));
+                    .putExtra(D.GoodDetails.KEY_GOODS_ID,collect.getGoodsId()));
                 }
             });
+        //    Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).error(R.drawable.delete).into(mCollectViewHolder.ivDelete);
+            if ( mCollectViewHolder.ivDelete!=null) {
+                mCollectViewHolder.ivDelete.setImageResource(R.drawable.delete);
+                mCollectViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OkHttpUtils2<MessageBean> utils2 = new OkHttpUtils2<MessageBean>();
+                        utils2.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                                .addParam(I.Collect.USER_NAME, FuLiCenterApplication.getInstance().getUserName())
+                                .addParam(I.Collect.GOODS_ID,String.valueOf(collect.getGoodsId()))
+                                .targetClass(MessageBean.class)
+                                .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                                    @Override
+                                    public void onSuccess(MessageBean result) {
+                                        if (result != null && result.isSuccess()) {
+                                            new DownloadCollectCountTask(mContext, FuLiCenterApplication.getInstance().getUserName()).execute();
+                                            mCollectList.remove(collect);
+                                            notifyDataSetChanged();
+                                        } else {
+                                            Log.e(TAG,"delete fail");
+                                        }
+                                        Toast.makeText(mContext, result.getMsg(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "error=" + error);
+
+                                    }
+                                });
+                    }
+                });
+            }
         }
         if (holder instanceof FooterViewHolder) {
             mFooterViewHolder = (FooterViewHolder) holder;
@@ -98,7 +136,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mCollectList !=null? mCollectList.size()+1:1;
+        return mCollectList !=null? mCollectList.size()+1:0;
     }
 
     public void initData(ArrayList<CollectBean> list) {
@@ -118,13 +156,13 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
         LinearLayout layout;
         ImageView ivGoodThumb;
         TextView tvGoodName;
-        ImageView ivDeletet;
+        ImageView ivDelete;
         public CollectViewHolder(View itemView) {
             super(itemView);
             layout= (LinearLayout) itemView.findViewById(R.id.layout_new_good);
             ivGoodThumb = (ImageView) itemView.findViewById(R.id.iv_good_thumb);
             tvGoodName = (TextView) itemView.findViewById(R.id.tv_good_name);
-            ivDeletet = (ImageView) itemView.findViewById(R.id.iv_collect_delete);
+            ivDelete = (ImageView) itemView.findViewById(R.id.iv_collect_delete);
         }
     }
 
