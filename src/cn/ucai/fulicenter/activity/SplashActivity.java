@@ -21,6 +21,7 @@ import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.db.UserDao;
+import cn.ucai.fulicenter.task.DownloadCartListTask;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.Utils;
 
@@ -66,7 +67,6 @@ public class SplashActivity extends BaseActivity {
 					Log.e(TAG, "userName=" + userName);
 					UserDao dao = new UserDao(SplashActivity.this);
 					UserAvatar user = dao.getUserAvatar(userName);
-					Log.e(TAG, "user=" + user);
 					if (user==null) {
 						final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
 						utils2.setRequestUrl(I.REQUEST_FIND_USER)
@@ -80,9 +80,10 @@ public class SplashActivity extends BaseActivity {
 										Log.e(TAG,"result="+result);
 										if (result != null && result.isRetMsg()) {
 											UserAvatar user = (UserAvatar) result.getRetData();
-											Log.e(TAG,"user="+user);
+											Log.e(TAG,"onSuccess,user="+user);
 											if (user!=null) {
 												//服务器存在此用户，显示此用户和添加按钮
+												Log.e(TAG, "FuLiCenterApplication,user=" + user);
 												FuLiCenterApplication.getInstance().setUser(user);
 												FuLiCenterApplication.currentUserNick = user.getMUserNick();
 											}
@@ -100,6 +101,7 @@ public class SplashActivity extends BaseActivity {
 					//new DownloadContactListTask(SplashActivity.this,userName).execute();
 					//new DownloadGroupListTask(SplashActivity.this,userName).execute();
 					new DownloadCollectCountTask(SplashActivity.this,userName).execute();
+					new DownloadCartListTask(SplashActivity.this,userName).execute();
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长
 					if (sleepTime - costTime > 0) {
