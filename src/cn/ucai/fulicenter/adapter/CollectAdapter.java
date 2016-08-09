@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +76,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                 holder = new FooterViewHolder(inflater.inflate(R.layout.item_footer,parent, false));
                 break;
             case I.TYPE_ITEM:
-                holder = new CollectViewHolder(inflater.inflate(R.layout.item_new_good, null, false));
+                holder = new CollectViewHolder(inflater.inflate(R.layout.item_collect, null, false));
                 break;
         }
         return holder;
@@ -87,6 +89,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
             final CollectBean collect = mCollectList.get(position);
             ImageUtils.setGoodThumb(mContext, mCollectViewHolder.ivGoodThumb,collect.getGoodsThumb());
             mCollectViewHolder.tvGoodName.setText(collect.getGoodsName());
+            Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).into(mCollectViewHolder.ivDelete);
             mCollectViewHolder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,9 +97,8 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                     .putExtra(D.GoodDetails.KEY_GOODS_ID,collect.getGoodsId()));
                 }
             });
+
         //    Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).error(R.drawable.delete).into(mCollectViewHolder.ivDelete);
-            if ( mCollectViewHolder.ivDelete!=null) {
-                mCollectViewHolder.ivDelete.setImageResource(R.drawable.delete);
                 mCollectViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -109,8 +111,8 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                                     @Override
                                     public void onSuccess(MessageBean result) {
                                         if (result != null && result.isSuccess()) {
-                                            new DownloadCollectCountTask(mContext, FuLiCenterApplication.getInstance().getUserName()).execute();
                                             mCollectList.remove(collect);
+                                            new DownloadCollectCountTask(mContext, FuLiCenterApplication.getInstance().getUserName()).execute();
                                             notifyDataSetChanged();
                                         } else {
                                             Log.e(TAG,"delete fail");
@@ -126,7 +128,6 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                                 });
                     }
                 });
-            }
         }
         if (holder instanceof FooterViewHolder) {
             mFooterViewHolder = (FooterViewHolder) holder;
@@ -163,6 +164,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
             ivGoodThumb = (ImageView) itemView.findViewById(R.id.iv_good_thumb);
             tvGoodName = (TextView) itemView.findViewById(R.id.tv_good_name);
             ivDelete = (ImageView) itemView.findViewById(R.id.iv_collect_delete);
+
         }
     }
 
