@@ -19,7 +19,7 @@ public class CartBean implements Serializable {
      * goods : GoodDetailsBean
      */
 
-    private int id;
+    private int id = 0;
     private String userName;
     private int goodsId;
     private int count;
@@ -85,5 +85,21 @@ public class CartBean implements Serializable {
                 ", isChecked=" + isChecked +
                 ", goods='" + goods + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CartBean cartBean = (CartBean) o;
+
+        return id == cartBean.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

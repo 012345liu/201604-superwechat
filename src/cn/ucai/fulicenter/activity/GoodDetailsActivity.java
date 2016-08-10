@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.ucai.fulicenter.D;
@@ -21,10 +23,12 @@ import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
+import cn.ucai.fulicenter.task.UpdateCartTask;
 import cn.ucai.fulicenter.utils.DisplayUtils;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.FlowIndicator;
@@ -188,9 +192,35 @@ public class GoodDetailsActivity extends BaseActivity{
                 case R.id.iv_good_share:
                     showShare();
                     break;
+                case R.id.iv_good_cart:
+                    addCart();
+                    break;
             }
         }
     }
+
+    private void addCart() {
+        List<CartBean> cartList = FuLiCenterApplication.getInstance().getCartList();
+        CartBean cart = new CartBean();
+        boolean isExist = false;
+        for (CartBean cartBean:cartList) {
+            if (cartBean.getGoodsId() == goodId) {
+                cart.setChecked(cartBean.isChecked());
+                cart.setCount(cart.getCount() + 1);
+                cart.setGoods(mGoodDetails);
+                cart.setUserName(cartBean.getUserName());
+                isExist = true;
+            }
+        }
+        if (!isExist) {
+            cart.setChecked(true);
+            cart.setCount(1);
+            cart.setGoods(mGoodDetails);
+            cart.setUserName(FuLiCenterApplication.getInstance().getUserName());
+        }
+        new UpdateCartTask(mContext,cart).execute();
+    }
+
     private void showShare() {
         ShareSDK.initSDK(this);
         OnekeyShare oks = new OnekeyShare();
@@ -325,7 +355,6 @@ public class GoodDetailsActivity extends BaseActivity{
         super.onDestroy();
         if (mReceiver!=null) {
             unregisterReceiver(mReceiver);
-
         }
     }
 }
