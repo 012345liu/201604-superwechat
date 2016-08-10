@@ -131,10 +131,10 @@ public class CartFragment extends Fragment {
             if (mCartList.size()<I.PAGE_SIZE_DEFAULT){
                 mCartAdapter.setMore(false);
             }
-            sumPrice();
         }else {
             mCartAdapter.setMore(false);
         }
+        sumPrice();
     }
     private  void findViewGoodList(OkHttpUtils2.OnCompleteListener<String> listener){
         final  OkHttpUtils2<String> utils=new OkHttpUtils2<>();
@@ -199,6 +199,7 @@ public class CartFragment extends Fragment {
     private void setUpdateCartListener() {
         mReceiver = new UpdateCartReceiver();
         IntentFilter filter = new IntentFilter("update_cart_list");
+        filter.addAction("update_user");
         mContext.registerReceiver(mReceiver, filter);
     }
     @Override
