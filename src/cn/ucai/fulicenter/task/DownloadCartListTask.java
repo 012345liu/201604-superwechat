@@ -41,8 +41,9 @@ public class DownloadCartListTask {
                         Log.e(TAG,"s="+s);
                         if (s!=null) {
                             ArrayList<CartBean> list = Utils.array2List(s);
+                            Log.e(TAG,"cart list.size="+list.size());
                             List<CartBean> cartList = FuLiCenterApplication.getInstance().getCartList();
-                            for (final CartBean cart : cartList) {
+                            for (final CartBean cart : list) {
                                 if (!cartList.contains(cart)) {
                                     OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<>();
                                     utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
@@ -52,6 +53,7 @@ public class DownloadCartListTask {
                                                 @Override
                                                 public void onSuccess(GoodDetailsBean result) {
                                                     cart.setGoods(result);
+                                                    mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                                                 }
 
                                                 @Override
@@ -65,10 +67,9 @@ public class DownloadCartListTask {
                                     cartList.get(cartList.indexOf(cart)).setChecked(cart.isChecked());
                                     cartList.get(cartList.indexOf(cart)).setCount(cart.getCount());
                                 }
-                                mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                             }
+                            mContext.sendStickyBroadcast(new Intent("update_cart_list"));
 
-                            Log.e(TAG,"cartList.size="+cartList.size());
                         }
 
                     }
