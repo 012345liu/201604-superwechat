@@ -1,6 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +26,7 @@ import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.DisplayUtils;
+import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
 
@@ -55,6 +59,8 @@ public class GoodDetailsActivity extends BaseActivity{
         MyOnClickListener listener = new MyOnClickListener();
         ivCollect.setOnClickListener(listener);
         ivShare.setOnClickListener(listener);
+        ivCart.setOnClickListener(listener);
+        setUpdateCartCountListener();
     }
 
     private void initData() {
@@ -229,7 +235,7 @@ public class GoodDetailsActivity extends BaseActivity{
                                 if (result != null && result.isSuccess()) {
                                     isCollect = false;
                                     new DownloadCollectCountTask(mContext, FuLiCenterApplication.getInstance().getUserName()).execute();
-                                    sendStickyBroadcast(new Intent("update_collect_list"));
+                                    mContext.sendStickyBroadcast(new Intent("update_collect_list"));
                                     
                                 } else {
                                     Log.e(TAG, "delete fail");
@@ -262,7 +268,7 @@ public class GoodDetailsActivity extends BaseActivity{
                                 if (result != null && result.isSuccess()) {
                                     isCollect = true;
                                     new DownloadCollectCountTask(mContext, FuLiCenterApplication.getInstance().getUserName()).execute();
-                                    sendStickyBroadcast(new Intent("update_collect_list"));
+                                    mContext.sendStickyBroadcast(new Intent("update_collect_list"));
                                 }
                                 updateCollectStatus();
                                 Toast.makeText(mContext, result.getMsg(), Toast.LENGTH_SHORT).show();
@@ -284,6 +290,41 @@ public class GoodDetailsActivity extends BaseActivity{
             ivCollect.setImageResource(R.drawable.bg_collect_out);
         } else {
             ivCollect.setImageResource(R.drawable.bg_collect_in);
+        }
+    }
+    class updateCartNumReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateCartNum();
+
+        }
+    }
+
+    updateCartNumReceiver mReceiver;
+    private void setUpdateCartCountListener() {
+        mReceiver = new updateCartNumReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        registerReceiver(mReceiver, filter);
+    }
+    private void updateCartNum() {
+        int count = Utils.sumCartCount();
+        Log.e(TAG, "-----count=" + count);
+        if (!DemoHXSDKHelper.getInstance().isLogined() || count == 0) {
+            tvCartCount.setText(String.valueOf(0));
+            tvCartCount.setVisibility(View.GONE);
+        } else {
+            tvCartCount.setText(String.valueOf(count));
+            tvCartCount.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver!=null) {
+            unregisterReceiver(mReceiver);
+
         }
     }
 }
