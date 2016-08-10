@@ -30,6 +30,7 @@ public class FuliCenterMainActivity extends BaseActivity{
     NewGoodFragment mNewGoodFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    CartFragment mCartFragment;
     PersonalCenterFragment mPersonalCenterFragment;
     Fragment[] mFragments;
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,12 @@ public class FuliCenterMainActivity extends BaseActivity{
         mBoutiqueFragment=new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
         mPersonalCenterFragment = new PersonalCenterFragment();
+        mCartFragment = new CartFragment();
         mFragments = new Fragment[5];
         mFragments[0] = mNewGoodFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
+        mFragments[3] = mCartFragment;
         mFragments[4] = mPersonalCenterFragment;
     }
 
