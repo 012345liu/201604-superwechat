@@ -205,14 +205,17 @@ public class GoodDetailsActivity extends BaseActivity{
         boolean isExist = false;
         for (CartBean cartBean:cartList) {
             if (cartBean.getGoodsId() == goodId) {
+                cart.setId(cartBean.getId());
+                cart.setGoodsId(goodId);
                 cart.setChecked(cartBean.isChecked());
-                cart.setCount(cart.getCount() + 1);
+                cart.setCount(cartBean.getCount() + 1);
                 cart.setGoods(mGoodDetails);
                 cart.setUserName(cartBean.getUserName());
                 isExist = true;
             }
         }
         if (!isExist) {
+            cart.setGoodsId(goodId);
             cart.setChecked(true);
             cart.setCount(1);
             cart.setGoods(mGoodDetails);
