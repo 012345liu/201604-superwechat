@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.CartAdapter;
 import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.data.OkHttpUtils2;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -213,10 +216,9 @@ public class CartFragment extends Fragment {
         if (mReceiver!=null) {
             mContext.unregisterReceiver(mReceiver);
         }
+        OkHttpUtils2.release();
+        RefWatcher refWatcher = FuLiCenterApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
-
-
-
-
 
 }

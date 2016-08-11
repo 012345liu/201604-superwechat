@@ -18,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,6 +27,7 @@ import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.UserAvatar;
+import cn.ucai.fulicenter.data.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.UserUtils;
 
 /**
@@ -57,6 +60,7 @@ public class PersonalCenterFragment extends Fragment {
         mLayoutCenterUserInfo.setOnClickListener(listener);
         mtvSettings.setOnClickListener(listener);
         mLayoutCenterCollect.setOnClickListener(listener);
+        updateCollectCountListener();
 
     }
 
@@ -140,13 +144,16 @@ public class PersonalCenterFragment extends Fragment {
     UpdateCollectCount mReceiver;
     private void updateCollectCountListener() {
         mReceiver = new UpdateCollectCount();
-        IntentFilter filter = new IntentFilter("update_collect");
+        IntentFilter filter = new IntentFilter("update_collect_list");
         mContext.registerReceiver(mReceiver,filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        OkHttpUtils2.release();
         mContext.unregisterReceiver(mReceiver);
+        RefWatcher refWatcher = FuLiCenterApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }
