@@ -20,13 +20,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.CartAdapter;
 import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
-import cn.ucai.fulicenter.data.OkHttpUtils2;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +68,19 @@ public class CartFragment extends Fragment {
         setPullDownRefreshListener();
         setPullUpRefreshListener();
         setUpdateCartListener();
+        setByListener();
+
+    }
+
+    private void setByListener() {
+        tvBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (DemoHXSDKHelper.getInstance().isLogined() && sumPrice> 0) {
+                    startActivity(new Intent(mContext,BuyActivity.class));
+                }
+            }
+        });
 
     }
 
@@ -121,29 +134,20 @@ public class CartFragment extends Fragment {
         tvRefreshing.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         mCartAdapter.setMore(true);
-        if (mCartList!=null&&mCartList.size()>0){
-            Log.e(TAG,"mCartList.size="+mCartList.size());
-            if (action==I.ACTION_DOWNLOAD||action==I.ACTION_PULL_DOWN){
+        if (mCartList != null && mCartList.size() > 0) {
+            Log.e(TAG, "mCartList.size=" + mCartList.size());
+            if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
                 mCartAdapter.initItem(mCartList);
-            }else {
+            } else {
                 mCartAdapter.addItem(mCartList);
             }
-            if (mCartList.size()<I.PAGE_SIZE_DEFAULT){
+            if (mCartList.size() < I.PAGE_SIZE_DEFAULT) {
                 mCartAdapter.setMore(false);
             }
-        }else {
+        } else {
             mCartAdapter.setMore(false);
         }
         sumPrice();
-    }
-    private  void findViewGoodList(OkHttpUtils2.OnCompleteListener<String> listener){
-        final  OkHttpUtils2<String> utils=new OkHttpUtils2<>();
-        utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
-                .addParam(I.NewAndBoutiqueGood.CAT_ID,String.valueOf(I.CAT_ID))
-                .addParam(I.PAGE_ID,String.valueOf(pageId))
-                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
-                .targetClass(String.class)
-                .execute(listener);
     }
 
     private void initView(View view) {
@@ -167,9 +171,10 @@ public class CartFragment extends Fragment {
         tvSumPrice = (TextView) view.findViewById(R.id.tv_cart_sum_price);
 
     }
+    int sumPrice=0;
     public void sumPrice(){
         if (mCartList != null && mCartList.size() > 0) {
-            int sumPrice=0;
+            sumPrice=0;
             int rankPrice=0;
             for (CartBean cart : mCartList) {
                 GoodDetailsBean goods = cart.getGoods();
