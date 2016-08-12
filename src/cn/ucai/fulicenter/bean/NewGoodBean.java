@@ -4,218 +4,170 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
-
 /**
- * Created by sks on 2016/7/29.
+ * 新品和精选的实体类
+ * @author yao
+ *
  */
-public class NewGoodBean implements Serializable{
+public class NewGoodBean implements Serializable {
 
-    /**
-     * id : 1
-     * goodsId : 7672
-     * catId : 0
-     * goodsName : 趣味煮蛋模具
-     * goodsEnglishName : Kotobuki
-     * goodsBrief : 将煮好的鸡蛋…
-     * shopPrice : ￥110
-     * currencyPrice : ￥140
-     * promotePrice : ￥0
-     * rankPrice : ￥0
-     * promote : false
-     * goodsThumb : 201509/thumb_img/7672_thumb_G_14423845719.jpg
-     * goodsImg : 201509/goods_img/7672_P_1442389445199.jpg
-     * colorId : 4
-     * colorName : 绿色
-     * colorCode : #59d85c
-     * colorUrl : 1
-     * addTime : 1442389445
-     */
-
-    private int id;
-    private int goodsId;
-    private int catId;
-    private String goodsName;
-    private String goodsEnglishName;
-    private String goodsBrief;
-    private String shopPrice;
-    private String currencyPrice;
-    private String promotePrice;
-    private String rankPrice;
+	private int id;
+	/** 商品id*/
+	private int goodsId;
+	/** 所属类别的id*/
+	private int catId;
+	/** 商品的中文名称*/
+	private String goodsName;
+	/** 商品的英文名称*/
+	private String goodsEnglishName;
+	/** 商品简介*/
+	private String goodsBrief;
+	/** 商品原始价格*/
+	private String shopPrice;
+	/** 商品的RMB价格 */
+	private String currencyPrice;
+	/** 商品折扣价格 */
+	private String promotePrice;
+	/** 人民币折扣价格*/
+	private String rankPrice;
+	/**是否折扣*/
     @JsonProperty("isPromote")
-    private boolean isPromote;
-    private String goodsThumb;
-    private String goodsImg;
-    private int colorId;
-    private String colorName;
-    private String colorCode;
-    private String colorUrl;
-    private int addTime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(int goodsId) {
-        this.goodsId = goodsId;
-    }
-
-    public int getCatId() {
-        return catId;
-    }
-
-    public void setCatId(int catId) {
-        this.catId = catId;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getGoodsEnglishName() {
-        return goodsEnglishName;
-    }
-
-    public void setGoodsEnglishName(String goodsEnglishName) {
-        this.goodsEnglishName = goodsEnglishName;
-    }
-
-    public String getGoodsBrief() {
-        return goodsBrief;
-    }
-
-    public void setGoodsBrief(String goodsBrief) {
-        this.goodsBrief = goodsBrief;
-    }
-
-    public String getShopPrice() {
-        return shopPrice;
-    }
-
-    public void setShopPrice(String shopPrice) {
-        this.shopPrice = shopPrice;
-    }
-
-    public String getCurrencyPrice() {
-        return currencyPrice;
-    }
-
-    public void setCurrencyPrice(String currencyPrice) {
-        this.currencyPrice = currencyPrice;
-    }
-
-    public String getPromotePrice() {
-        return promotePrice;
-    }
-
-    public void setPromotePrice(String promotePrice) {
-        this.promotePrice = promotePrice;
-    }
-
-    public String getRankPrice() {
-        return rankPrice;
-    }
-
-    public void setRankPrice(String rankPrice) {
-        this.rankPrice = rankPrice;
-    }
-    @JsonIgnore
-    public boolean isPromote() {
-        return isPromote;
-    }
-
-    public void setPromote(boolean promote) {
-        this.isPromote = promote;
-    }
-
-    public String getGoodsThumb() {
-        return goodsThumb;
-    }
-
-    public void setGoodsThumb(String goodsThumb) {
-        this.goodsThumb = goodsThumb;
-    }
-
-    public String getGoodsImg() {
-        return goodsImg;
-    }
-
-    public void setGoodsImg(String goodsImg) {
-        this.goodsImg = goodsImg;
-    }
-
-    public int getColorId() {
-        return colorId;
-    }
-
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
-    }
-
-    public String getColorName() {
-        return colorName;
-    }
-
-    public void setColorName(String colorName) {
-        this.colorName = colorName;
-    }
-
-    public String getColorCode() {
-        return colorCode;
-    }
-
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
-
-    public String getColorUrl() {
-        return colorUrl;
-    }
-
-    public void setColorUrl(String colorUrl) {
-        this.colorUrl = colorUrl;
-    }
-
-    public int getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(int addTime) {
-        this.addTime = addTime;
-    }
-
-    @Override
-    public String toString() {
-        return "NewGoodBean{" +
-                "addTime=" + addTime +
-                ", id=" + id +
-                ", goodsId=" + goodsId +
-                ", catId=" + catId +
-                ", goodsName='" + goodsName + '\'' +
-                ", goodsEnglishName='" + goodsEnglishName + '\'' +
-                ", goodsBrief='" + goodsBrief + '\'' +
-                ", shopPrice='" + shopPrice + '\'' +
-                ", currencyPrice='" + currencyPrice + '\'' +
-                ", promotePrice='" + promotePrice + '\'' +
-                ", rankPrice='" + rankPrice + '\'' +
-                ", promote=" + isPromote +
-                ", goodsThumb='" + goodsThumb + '\'' +
-                ", goodsImg='" + goodsImg + '\'' +
-                ", colorId=" + colorId +
-                ", colorName='" + colorName + '\'' +
-                ", colorCode='" + colorCode + '\'' +
-                ", colorUrl='" + colorUrl + '\'' +
-                '}';
-    }
+	private boolean isPromote;
+	/** 商品缩略图地址*/
+	private String goodsThumb;
+	/** 商品图片地址*/
+	private String goodsImg;
+	/** 颜色id*/
+	private int colorId;
+	/** 颜色名*/
+	private String colorName;
+	/** 颜色代码*/
+	private String colorCode;
+	/** 导购链接*/
+	private String colorUrl;
+	/** 商品上架日期，单位：毫秒*/
+	private String addTime;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getGoodsId() {
+		return goodsId;
+	}
+	public void setGoodsId(int goodId) {
+		this.goodsId = goodId;
+	}
+	public int getCatId() {
+		return catId;
+	}
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public String getGoodsEnglishName() {
+		return goodsEnglishName;
+	}
+	public void setGoodsEnglishName(String goodsEnglishName) {
+		this.goodsEnglishName = goodsEnglishName;
+	}
+	public String getGoodsBrief() {
+		return goodsBrief;
+	}
+	public void setGoodsBrief(String goodsBrief) {
+		this.goodsBrief = goodsBrief;
+	}
+	public String getShopPrice() {
+		return shopPrice;
+	}
+	public void setShopPrice(String shopPrice) {
+		this.shopPrice = shopPrice;
+	}
+	public String getCurrencyPrice() {
+		return currencyPrice;
+	}
+	public void setCurrencyPrice(String currencyPrice) {
+		this.currencyPrice = currencyPrice;
+	}
+	public String getPromotePrice() {
+		return promotePrice;
+	}
+	public void setPromotePrice(String promotePrice) {
+		this.promotePrice = promotePrice;
+	}
+	public String getRankPrice() {
+		return rankPrice;
+	}
+	public void setRankPrice(String rankPrice) {
+		this.rankPrice = rankPrice;
+	}
+	public String getGoodsThumb() {
+		return goodsThumb;
+	}
+	public void setGoodsThumb(String goodsThumb) {
+		this.goodsThumb = goodsThumb;
+	}
+	public String getGoodsImg() {
+		return goodsImg;
+	}
+	public void setGoodsImg(String goodsImg) {
+		this.goodsImg = goodsImg;
+	}
+	public int getColorId() {
+		return colorId;
+	}
+	public void setColorId(int colorId) {
+		this.colorId = colorId;
+	}
+	public String getColorName() {
+		return colorName;
+	}
+	public void setColorName(String colorName) {
+		this.colorName = colorName;
+	}
+	public String getColorCode() {
+		return colorCode;
+	}
+	public void setColorCode(String colorCode) {
+		this.colorCode = colorCode;
+	}
+	public String getColorUrl() {
+		return colorUrl;
+	}
+	public void setColorUrl(String colorUrl) {
+		this.colorUrl = colorUrl;
+	}
+	public String getAddTime() {
+		return addTime;
+	}
+	public void setAddTime(String addTime) {
+		this.addTime = addTime;
+	}
+	@JsonIgnore
+	public boolean isPromote() {
+		return isPromote;
+	}
+	public void setPromote(boolean isPromote) {
+		this.isPromote = isPromote;
+	}
+	@Override
+	public String toString() {
+		return "NewGoodBean [id=" + id + ", goodsId=" + goodsId + ", catId="
+				+ catId + ", goodsName=" + goodsName + ", goodsEnglishName="
+				+ goodsEnglishName + ", goodsBrief=" + goodsBrief
+				+ ", shopPrice=" + shopPrice + ", currencyPrice="
+				+ currencyPrice + ", promotePrice=" + promotePrice
+				+ ", rankPrice=" + rankPrice + ", is_promote=" + isPromote
+				+ ", goodsThumb=" + goodsThumb + ", goodsImg=" + goodsImg
+				+ ", colorId=" + colorId + ", colorName=" + colorName
+				+ ", colorCode=" + colorCode + ", colorUrl=" + colorUrl
+				+ ", addTime=" + addTime + "]";
+	}
+	
 }

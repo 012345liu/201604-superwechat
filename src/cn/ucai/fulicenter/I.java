@@ -219,7 +219,8 @@ public interface I {
         ACTION_DOWNLOAD, ACTION_PULL_DOWN, ACTION_SCROLL
     }    
 
-	String SERVER_ROOT                             = "http://192.168.7.18:8080/FuLiCenterServer/Server";
+	String SERVER_ROOT                             = "http://192.168.7.24:8080/FuLiCenterServer/Server";
+	//String SERVER_ROOT                             = "http://172.168.1.112:8080/FuLiCenterServer/Server";
 //	String AVATAR_PATH 								= 		"E:/test/";
     public final int NEW_GOOD=0;
     public final int CATEGORY_GOOD=1;
@@ -233,7 +234,7 @@ public interface I {
     public final int SORT_BY_ADDTIME_ASC=3;
     public final int SORT_BY_ADDTIME_DESC=4;
 
-	String AVATAR_PATH 								= 		"//Users/clawpo/work/ucai/work/projects/SuperWeChat/teaching/201603/superwechatDB/";
+	String AVATAR_PATH 							= 		"//Users/clawpo/work/ucai/work/projects/SuperWeChat/teaching/201603/superwechatDB/";
 	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";
 	String PAGE_ID 									= 		"page_id";						//分页的起始下标
@@ -478,7 +479,7 @@ public interface I {
     /** 下载分类商品大类图像的请求*/
     String REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE="download_category_group_image";
     /** 下载分类商品大类图像的接口*/
-    String DOWNLOAD_DOWNLOAD_CATEGORY_GROUP_IMAGE_URL= I.SERVER_ROOT+
+    String REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE_URL= I.SERVER_ROOT+
         "?request="+REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE
         +"&"+D.CategoryGroup.IMAGE_URL+"=";
 
@@ -492,7 +493,7 @@ public interface I {
     /** 下载分类商品小类图像的请求*/
     String REQUEST_DOWNLOAD_CATEGORY_CHILD_IMAGE="download_category_child_image";
     /** 下载分类商品小类图像的接口*/
-    String DOWNLOAD_DOWNLOAD_CATEGORY_CHILD_IMAGE_URL= I.SERVER_ROOT+
+    String REQUEST_DOWNLOAD_CATEGORY_CHILD_IMAGE_URL= I.SERVER_ROOT+
         "?request="+REQUEST_DOWNLOAD_CATEGORY_GROUP_IMAGE
         +"&"+D.CategoryChild.IMAGE_URL+"=";
     

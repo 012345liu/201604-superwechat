@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.Pager;
 import cn.ucai.fulicenter.bean.Result;
 
@@ -79,9 +81,14 @@ public class Utils {
     public static <T> Result getResultFromJson(String jsonStr,Class<T> clazz){
         Result result = new Result();
         try {
+            if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
             if (!jsonObject.isNull("retCode")) {
                 result.setRetCode(jsonObject.getInt("retCode"));
+            } else if (!jsonObject.isNull("msg")) {
+                result.setRetCode(jsonObject.getInt("msg"));
             }
             if (!jsonObject.isNull("retMsg")) {
                 result.setRetMsg(jsonObject.getBoolean("retMsg"));
@@ -109,14 +116,15 @@ public class Utils {
                 }
             } else {
                 if (jsonObject != null) {
-                    Log.e("Utils", "jsonObject=" + jsonObject);
+                    Log.e("Utils", "jsonRetData=" + jsonObject);
                     String date;
                     try {
                         date = URLDecoder.decode(jsonObject.toString(), I.UTF_8);
-                        Log.e("Utils", "jsonObject=" + date);
+                        Log.e("Utils", "jsonRetData=" + date);
                         T t = new Gson().fromJson(date, clazz);
                         result.setRetData(t);
                         return result;
+
                     } catch (UnsupportedEncodingException e1) {
                         e1.printStackTrace();
                         T t = new Gson().fromJson(jsonObject.toString(), clazz);
@@ -255,5 +263,14 @@ public class Utils {
     public static int dp2px(Context context,int dp){
         int density = (int) context.getResources().getDisplayMetrics().density;
         return dp*density;
+    }
+
+    public static int sumCartCount() {
+        int count = 0;
+        List<CartBean> cartList = FuLiCenterApplication.getInstance().getCartList();
+        for (CartBean cart:cartList) {
+            count += cart.getCount();
+        }
+        return count;
     }
 }

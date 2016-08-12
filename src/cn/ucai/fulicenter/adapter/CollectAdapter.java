@@ -98,7 +98,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                 }
             });
 
-        //    Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).error(R.drawable.delete).into(mCollectViewHolder.ivDelete);
+        //    Picasso.with(mContext).load(R.drawable.delete).placeholder(R.drawable.delete).error(R.drawable.delete).into(mCartViewHolder.ivDelete);
                 mCollectViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -117,7 +117,9 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
                                         } else {
                                             Log.e(TAG,"delete fail");
                                         }
+
                                         Toast.makeText(mContext, result.getMsg(), Toast.LENGTH_SHORT).show();
+                                        mContext.sendStickyBroadcast(new Intent("update_collect_list"));
                                     }
 
                                     @Override
@@ -137,7 +139,7 @@ public class CollectAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mCollectList !=null? mCollectList.size()+1:0;
+        return mCollectList !=null? mCollectList.size()+1:1;
     }
 
     public void initData(ArrayList<CollectBean> list) {

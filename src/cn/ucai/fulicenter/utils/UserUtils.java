@@ -199,7 +199,10 @@ public class UserUtils {
 		if (user != null && textView!= null) {
 			if (user.getMUserNick()!=null) {
 				textView.setText(user.getMUserNick());
+			}else {
+				textView.setText(user.getMUserName());
 			}
+
 		} else {
 			textView.setText(user.getMUserName());
 		}

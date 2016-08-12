@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.task;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import cn.ucai.fulicenter.FuLiCenterApplication;
@@ -36,6 +37,8 @@ public class DownloadCollectCountTask {
                             } else {
                                 FuLiCenterApplication.getInstance().setCollectCount(0);
                             }
+                            mContext.sendStickyBroadcast(new Intent("update_collect_list"));
+
                         }
                     }
                     @Override

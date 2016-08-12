@@ -47,16 +47,12 @@ public class DownloadContactListTask {
                             for (UserAvatar user : list) {
                                 userMap.put(user.getMUserName(), user);
                             }
-
                         }
-
-
                     }
 
                     @Override
                     public void onError(String error) {
                         Log.e(TAG,"error="+error);
-
                     }
                 });
 

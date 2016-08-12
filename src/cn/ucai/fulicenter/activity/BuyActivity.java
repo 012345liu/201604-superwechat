@@ -88,11 +88,9 @@ public class BuyActivity extends BaseActivity implements PaymentHandler{
                     return;
                 }
                 gotoStatement();
-
             }
 
         });
-
     }
     private int convertPrice(String price) {
         price = price.substring(1,price.length());

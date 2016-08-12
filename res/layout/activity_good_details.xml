@@ -50,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="25dp"
-        android:layout_below="@id/layout_title">
+        android:layout_below="@id/layout_title"
+        android:background="@color/good_detail_bg_white">
         <TextView
             android:id="@+id/tv_good_name_english"
             android:layout_width="wrap_content"
@@ -92,7 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/good_detail_bg_white" />
-
             <cn.ucai.fulicenter.view.FlowIndicator
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"

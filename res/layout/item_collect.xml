@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
+    android:layout_width="wrap_content"
+    android:id="@+id/collet"
+    >
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:layout_margin="5dp"
-        android:id="@+id/layout_new_good"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/layout_new_good">
         <ImageView
             android:id="@+id/iv_good_thumb"
             android:layout_width="match_parent"

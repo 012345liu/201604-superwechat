@@ -88,7 +88,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class)
-                    .putExtra(D.GoodDetails.KEY_GOODS,good.getGoodsId()));
+                    .putExtra(D.GoodDetails.KEY_GOODS_ID,good.getGoodsId()));
                 }
             });
         }
